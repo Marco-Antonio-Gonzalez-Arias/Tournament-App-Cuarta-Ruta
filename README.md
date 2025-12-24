@@ -1,3 +1,3 @@
 # cuarta_ruta_app
 
-A new Flutter project.
+A mobile app to manage brackets, formats, and voting for rap battles.
