@@ -25,7 +25,7 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: AppTheme(colorSeed: Colors.deepPurple, isDarkMode: _isDarkMode).theme(),
+      theme: AppTheme(colorSeed: Colors.yellow, isDarkMode: _isDarkMode).theme(),
       home: Scaffold(
         appBar: AppBar(
           title: const Text("Cuarta Ruta"),
