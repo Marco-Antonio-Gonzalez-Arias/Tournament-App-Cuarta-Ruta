@@ -1,4 +1,6 @@
 import 'package:cuarta_ruta_app/config/app_theme.dart';
+import 'package:cuarta_ruta_app/utils/responsive.dart';
+import 'package:cuarta_ruta_app/screens/home.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -23,26 +25,40 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
+    final Responsive responsive = Responsive.of(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: AppTheme(colorSeed: Colors.yellow, isDarkMode: _isDarkMode).theme(),
+      theme: AppTheme(
+        colorSeed: Colors.yellow,
+        isDarkMode: _isDarkMode,
+      ).theme(),
       home: Scaffold(
         appBar: AppBar(
-          title: const Text("Cuarta Ruta"),
+          leading: Padding(
+            padding: EdgeInsets.all(responsive.dp(0.7)),
+            child: Image.asset(
+              _isDarkMode 
+                ? 'assets/icon/icon_light.png' 
+                : 'assets/icon/icon_black.png'
+            ),
+          ),
+          title: Text(
+            "CUARTA RUTA",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: responsive.dp(2.5)
+            ),
+          ),
           actions: [
             IconButton(
               icon: Icon(_isDarkMode ? Icons.light_mode : Icons.dark_mode),
+              iconSize: responsive.dp(3),
               onPressed: _toggleDarkMode,
             ),
           ],
-          ),
-        body: Center(
-          child: FilledButton.icon(
-            onPressed: () {},
-            label: const Text("Prueba de tema"),
-            icon: const Icon(Icons.check),
-          ),
         ),
+        body: const Home(),
       ),
     );
   }
