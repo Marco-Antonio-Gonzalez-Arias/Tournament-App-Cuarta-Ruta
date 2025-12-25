@@ -1,4 +1,4 @@
-import 'package:cuarta_ruta_app/config/themes/app_theme.dart';
+import 'package:cuarta_ruta_app/config/app_theme.dart';
 import 'package:flutter/material.dart';
 
 void main() {
