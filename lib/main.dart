@@ -1,4 +1,7 @@
 import 'package:cuarta_ruta_app/config/app_theme.dart';
+import 'package:cuarta_ruta_app/controllers/theme_controller.dart';
+import 'package:cuarta_ruta_app/controllers/app_bar_controller.dart';
+import 'package:cuarta_ruta_app/screens/home.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,37 +16,34 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  bool _isDarkMode = false;
-
-  void _toggleDarkMode() {
-    setState(() {
-      _isDarkMode = !_isDarkMode;
-    });
-  }
+  final ThemeController _themeController = ThemeController();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme(colorSeed: Colors.deepPurple, isDarkMode: _isDarkMode).theme(),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text("Cuarta Ruta"),
-          actions: [
-            IconButton(
-              icon: Icon(_isDarkMode ? Icons.light_mode : Icons.dark_mode),
-              onPressed: _toggleDarkMode,
+    return ListenableBuilder(
+      listenable: _themeController,
+      builder: (context, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme(
+            colorSeed: Colors.yellow,
+            isDarkMode: _themeController.isDarkMode,
+          ).theme(),
+          home: Scaffold(
+            appBar: CustomAppBar(
+              isDarkMode: _themeController.isDarkMode,
+              onToggleDarkMode: _themeController.toggleDarkMode,
             ),
-          ],
+            body: const Home(),
           ),
-        body: Center(
-          child: FilledButton.icon(
-            onPressed: () {},
-            label: const Text("Prueba de tema"),
-            icon: const Icon(Icons.check),
-          ),
-        ),
-      ),
+        );
+      },
     );
+  }
+
+  @override
+  void dispose() {
+    _themeController.dispose();
+    super.dispose();
   }
 }
