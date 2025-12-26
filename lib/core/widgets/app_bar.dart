@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cuarta_ruta_app/utils/responsive.dart';
+import 'package:cuarta_ruta_app/core/utils/responsive.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isDarkMode;

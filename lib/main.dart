@@ -1,44 +1,38 @@
+import 'package:cuarta_ruta_app/core/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:cuarta_ruta_app/config/app_theme.dart';
+import 'package:cuarta_ruta_app/core/config/app_theme.dart';
 import 'package:cuarta_ruta_app/screens/home.dart';
-import 'package:cuarta_ruta_app/shared_widgets/app_bar.dart';
+import 'package:cuarta_ruta_app/core/widgets/app_bar.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(const MainApp());
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: const MainApp(),
+    ),
+  );
+}
 
-class MainApp extends StatefulWidget {
+class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
-  State<MainApp> createState() => _MainAppState();
-}
-
-class _MainAppState extends State<MainApp> {
-  bool _isDarkMode = false;
-  void _toggleDarkMode() => setState(() => _isDarkMode = !_isDarkMode);
-
-  @override
   Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: _buildCurrentTheme(),
-      home: _buildMainScreen(),
-    );
-  }
-
-  ThemeData _buildCurrentTheme() {
-    return AppTheme(
-      colorSeed: Colors.yellow,
-      isDarkMode: _isDarkMode,
-    ).theme();
-  }
-
-  Widget _buildMainScreen() {
-    return Scaffold(
-      appBar: MyAppBar(
-        isDarkMode: _isDarkMode,
-        onToggleDarkMode: _toggleDarkMode,
+      theme: AppTheme(
+        colorSeed: Colors.yellow,
+        isDarkMode: themeProvider.isDarkMode,
+      ).theme(),
+      home: Scaffold(
+        appBar: MyAppBar(
+          isDarkMode: themeProvider.isDarkMode,
+          onToggleDarkMode: themeProvider.toggleTheme,
+        ),
+        body: const Home(),
       ),
-      body: const Home(),
     );
   }
 }
