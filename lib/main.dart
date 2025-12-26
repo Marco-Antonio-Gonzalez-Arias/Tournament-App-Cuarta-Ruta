@@ -22,6 +22,7 @@ class MainApp extends StatelessWidget {
     final themeProvider = context.watch<ThemeProvider>();
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: AppTheme(
         colorSeed: Colors.yellow,
         isDarkMode: themeProvider.isDarkMode,
