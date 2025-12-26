@@ -1,6 +1,7 @@
 import 'package:cuarta_ruta_app/core/providers/theme_provider.dart';
+import 'package:cuarta_ruta_app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
-import 'package:cuarta_ruta_app/core/config/app_theme.dart';
+import 'package:cuarta_ruta_app/core/config/theme/app_theme.dart';
 import 'package:cuarta_ruta_app/screens/home.dart';
 import 'package:cuarta_ruta_app/core/widgets/app_bar.dart';
 import 'package:provider/provider.dart';
@@ -20,12 +21,13 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = context.watch<ThemeProvider>();
+    final responsive = Responsive.of(context);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme(
-        colorSeed: Colors.yellow,
         isDarkMode: themeProvider.isDarkMode,
+        responsive: responsive,
       ).theme(),
       home: Scaffold(
         appBar: MyAppBar(

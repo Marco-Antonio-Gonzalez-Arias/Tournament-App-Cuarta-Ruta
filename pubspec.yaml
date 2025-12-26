@@ -28,4 +28,4 @@ flutter:
   fonts:
     - family: Bangers
       fonts:
-        - asset: fonts/Bangers-Regular.ttf
+        - asset: assets/fonts/Bangers-Regular.ttf

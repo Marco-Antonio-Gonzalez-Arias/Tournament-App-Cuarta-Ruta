@@ -1,3 +1,4 @@
+import 'package:cuarta_ruta_app/core/widgets/logo_image.dart';
 import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive.dart';
 
@@ -17,29 +18,22 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       leading: _buildLogo(responsive),
-      title: _buildTitle(responsive),
+      title: _buildTitle(context),
       actions: [_buildThemeAction(responsive)],
     );
   }
 
   Widget _buildLogo(Responsive responsive) {
-    final assetPath = isDarkMode 
-        ? 'assets/icon/icon_light.png' 
-        : 'assets/icon/icon_black.png';
-
     return Padding(
       padding: EdgeInsets.all(responsive.dp(0.7)),
-      child: Image.asset(assetPath),
+      child: LogoImage(height: responsive.dp(4)),
     );
   }
 
-  Widget _buildTitle(Responsive responsive) {
+  Widget _buildTitle(BuildContext context) {
     return Text(
-      "CUARTA RUTA",
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: responsive.dp(2.5),
-      ),
+      "Votación de batallas de rap",
+      style: Theme.of(context).textTheme.labelLarge,
     );
   }
 
