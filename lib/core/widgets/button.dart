@@ -18,7 +18,7 @@ class Button extends StatelessWidget {
 
     return SizedBox(
       width: double.infinity,
-      height: responsive.hp(9), // Altura responsiva
+      height: responsive.hp(9),
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
