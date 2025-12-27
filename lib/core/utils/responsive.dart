@@ -9,9 +9,7 @@ class Responsive {
   double get diagonal => _diagonal;
 
   static Responsive of(BuildContext context) {
-    final size = MediaQuery.sizeOf(
-      context,
-    );
+    final Size size = MediaQuery.sizeOf(context);
     return Responsive._(size);
   }
 
