@@ -16,24 +16,31 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
 
-    return AppBar(
-      leading: _buildLogo(responsive),
-      title: _buildTitle(context),
-      actions: [_buildThemeAction(responsive)],
+    // Padding lateral para alejar los elementos del borde amarillo
+    return Padding(
+      padding: EdgeInsets.only(
+        top: responsive.dp(2),
+        left: responsive.dp(1.5),
+        right: responsive.dp(1.5),
+      ),
+      child: AppBar(
+        leading: _buildLogo(responsive),
+        title: _buildTitle(context),
+        actions: [_buildThemeAction(responsive)],
+        // Centrar elementos si es necesario
+        centerTitle: true,
+      ),
     );
   }
 
   Widget _buildLogo(Responsive responsive) {
-    return Padding(
-      padding: EdgeInsets.all(responsive.dp(0.7)),
-      child: LogoImage(height: responsive.dp(4)),
-    );
+    return LogoImage(height: responsive.dp(3));
   }
 
   Widget _buildTitle(BuildContext context) {
     return Text(
       "Votación de batallas de rap",
-      style: Theme.of(context).textTheme.labelLarge,
+      style: Theme.of(context).textTheme.labelMedium,
     );
   }
 

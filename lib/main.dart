@@ -1,5 +1,7 @@
+import 'package:cuarta_ruta_app/core/config/theme/app_colors.dart';
 import 'package:cuarta_ruta_app/core/providers/theme_provider.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive.dart';
+import 'package:cuarta_ruta_app/core/widgets/app_border_decorator.dart';
 import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/config/theme/app_theme.dart';
 import 'package:cuarta_ruta_app/screens/home.dart';
@@ -14,7 +16,7 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  
+
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeProvider(),
@@ -37,6 +39,7 @@ class MainApp extends StatelessWidget {
         isDarkMode: themeProvider.isDarkMode,
         responsive: responsive,
       ).theme(),
+      builder: (context, child) => AppBorderDecorator(child: child!),
       home: Scaffold(
         appBar: MyAppBar(
           isDarkMode: themeProvider.isDarkMode,

@@ -14,17 +14,17 @@ class Home extends StatelessWidget {
       body: SafeArea(
         child: Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: responsive.wp(10)),
+          padding: EdgeInsets.symmetric(horizontal: responsive.wp(20)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildLogo(responsive),
-              const SizedBox(height: 50),
-              _buildMenuButton(context, 'Torneo'),
-              const SizedBox(height: 20),
-              _buildMenuButton(context, 'Libre'),
-              const SizedBox(height: 20),
-              _buildMenuButton(context, 'Visuales'),
+              SizedBox(height: responsive.hp(10)),
+              _buildMenuButton(context, responsive, 'Torneo'),
+              SizedBox(height: responsive.hp(10)),
+              _buildMenuButton(context, responsive, 'Libre'),
+              SizedBox(height: responsive.hp(10)),
+              _buildMenuButton(context, responsive, 'Visuales'),
             ],
           ),
         ),
@@ -33,17 +33,17 @@ class Home extends StatelessWidget {
   }
 
   Widget _buildLogo(Responsive responsive) {
-    return LogoImage(height: responsive.hp(20));
+    return LogoImage(height: responsive.hp(15));
   }
 
-  Widget _buildMenuButton(BuildContext context, String label) {
+  Widget _buildMenuButton(BuildContext context, Responsive responsive, String label) {
     return SizedBox(
       width: double.infinity,
       height: 80,
       child: OutlinedButton(
         onPressed: () {},
         style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: AppColors.primaryGold, width: 2),
+          side: BorderSide(color: AppColors.primaryGold, width: responsive.dp(0.3)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
