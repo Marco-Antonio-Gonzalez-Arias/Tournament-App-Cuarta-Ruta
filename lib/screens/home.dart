@@ -1,5 +1,6 @@
 import 'package:cuarta_ruta_app/core/widgets/button.dart';
 import 'package:cuarta_ruta_app/core/widgets/logo_image.dart';
+import 'package:cuarta_ruta_app/screens/tournament.dart';
 import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive.dart';
 
@@ -20,7 +21,15 @@ class Home extends StatelessWidget {
             children: [
               _buildLogo(responsive),
               SizedBox(height: responsive.hp(10)),
-              Button(label: 'Torneo', onPressed: () {}),
+              Button(
+                label: 'Torneo',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Tournament()),
+                  );
+                },
+              ),
               SizedBox(height: responsive.hp(3)),
               Button(label: 'Libre', onPressed: () {}),
               SizedBox(height: responsive.hp(3)),
