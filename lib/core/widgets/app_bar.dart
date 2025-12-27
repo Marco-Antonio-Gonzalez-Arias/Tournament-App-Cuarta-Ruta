@@ -25,16 +25,11 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         right: _responsive.dp(1.5),
       ),
       child: AppBar(
-        leading: _buildLogo(),
         title: _buildTitle(context),
         actions: [_buildThemeAction()],
         centerTitle: true,
       ),
     );
-  }
-
-  Widget _buildLogo() {
-    return Center(child: LogoImage(height: _responsive.dp(4)));
   }
 
   Widget _buildTitle(BuildContext context) {
