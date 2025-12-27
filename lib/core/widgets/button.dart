@@ -26,8 +26,8 @@ class Button extends StatelessWidget {
             color: AppColors.primaryGold, 
             width: responsive.dp(0.3)
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
         ),
         child: Text(
