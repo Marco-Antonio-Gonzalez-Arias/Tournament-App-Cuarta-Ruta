@@ -1,4 +1,4 @@
-import 'package:cuarta_ruta_app/core/config/theme/app_colors.dart';
+import 'package:cuarta_ruta_app/core/widgets/button.dart';
 import 'package:cuarta_ruta_app/core/widgets/logo_image.dart';
 import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive.dart';
@@ -20,11 +20,11 @@ class Home extends StatelessWidget {
             children: [
               _buildLogo(responsive),
               SizedBox(height: responsive.hp(10)),
-              _buildMenuButton(context, responsive, 'Torneo'),
+              Button(label: 'Torneo', onPressed: () {}),
               SizedBox(height: responsive.hp(10)),
-              _buildMenuButton(context, responsive, 'Libre'),
+              Button(label: 'Libre', onPressed: () {}),
               SizedBox(height: responsive.hp(10)),
-              _buildMenuButton(context, responsive, 'Visuales'),
+              Button(label: 'Visuales', onPressed: () {}),
             ],
           ),
         ),
@@ -34,25 +34,5 @@ class Home extends StatelessWidget {
 
   Widget _buildLogo(Responsive responsive) {
     return LogoImage(height: responsive.hp(15));
-  }
-
-  Widget _buildMenuButton(BuildContext context, Responsive responsive, String label) {
-    return SizedBox(
-      width: double.infinity,
-      height: 80,
-      child: OutlinedButton(
-        onPressed: () {},
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(color: AppColors.primaryGold, width: responsive.dp(0.3)),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-        child: Text(
-          label,
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
-      ),
-    );
   }
 }

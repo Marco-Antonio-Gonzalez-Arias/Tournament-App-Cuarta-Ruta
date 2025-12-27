@@ -1,4 +1,3 @@
-import 'package:cuarta_ruta_app/core/config/theme/app_colors.dart';
 import 'package:cuarta_ruta_app/core/providers/theme_provider.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive.dart';
 import 'package:cuarta_ruta_app/core/widgets/app_border_decorator.dart';
@@ -44,6 +43,7 @@ class MainApp extends StatelessWidget {
         appBar: MyAppBar(
           isDarkMode: themeProvider.isDarkMode,
           onToggleDarkMode: themeProvider.toggleTheme,
+          responsive: responsive,
         ),
         body: const Home(),
       ),
