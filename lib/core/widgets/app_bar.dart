@@ -1,52 +1,45 @@
-import 'package:cuarta_ruta_app/core/widgets/logo_image.dart';
+import 'package:cuarta_ruta_app/core/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive.dart';
+import 'package:provider/provider.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final bool _isDarkMode;
-  final VoidCallback _onToggleDarkMode;
-  final Responsive _responsive;
+  final String? _title;
 
   const MyAppBar({
     super.key,
-    required bool isDarkMode,
-    required VoidCallback onToggleDarkMode,
-    required Responsive responsive,
-  }) : _isDarkMode = isDarkMode,
-       _onToggleDarkMode = onToggleDarkMode,
-       _responsive = responsive;
+    String? title,
+  }) : _title = title;
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+    final responsive = Responsive.of(context);
+
     return Padding(
       padding: EdgeInsets.only(
-        top: _responsive.dp(2),
-        left: _responsive.dp(1.5),
-        right: _responsive.dp(1.5),
+        top: responsive.dp(2),
+        left: responsive.dp(1.5),
+        right: responsive.dp(1.5),
       ),
       child: AppBar(
-        title: _buildTitle(context),
-        actions: [_buildThemeAction()],
+        // Si _title es nulo, usa el por defecto
+        title: Text(
+          _title ?? "Votación de batallas de rap",
+          style: Theme.of(context).textTheme.labelMedium,
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode),
+            iconSize: responsive.dp(3),
+            onPressed: themeProvider.toggleTheme,
+          )
+        ],
         centerTitle: true,
       ),
     );
   }
 
-  Widget _buildTitle(BuildContext context) {
-    return Text(
-      "Votación de batallas de rap",
-      style: Theme.of(context).textTheme.labelMedium,
-    );
-  }
-
-  Widget _buildThemeAction() {
-    return IconButton(
-      icon: Icon(_isDarkMode ? Icons.light_mode : Icons.dark_mode),
-      iconSize: _responsive.dp(3),
-      onPressed: _onToggleDarkMode,
-    );
-  }
-
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight + _responsive.dp(2));
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 20); 
 }
