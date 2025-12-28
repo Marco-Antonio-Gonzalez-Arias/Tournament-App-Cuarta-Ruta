@@ -38,6 +38,7 @@ class MainApp extends StatelessWidget {
         responsive: responsive,
       ).theme(),
       builder: (context, child) => BorderDecorator(child: child!),
+      title: 'Cuarta Ruta App',
       home: const Home(),
     );
   }
