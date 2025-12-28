@@ -4,7 +4,6 @@ import 'package:cuarta_ruta_app/core/widgets/border_decorator.dart';
 import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/config/theme/app_theme.dart';
 import 'package:cuarta_ruta_app/screens/home.dart';
-import 'package:cuarta_ruta_app/core/widgets/app_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
@@ -39,14 +38,7 @@ class MainApp extends StatelessWidget {
         responsive: responsive,
       ).theme(),
       builder: (context, child) => BorderDecorator(child: child!),
-      home: Scaffold(
-        appBar: MyAppBar(
-          isDarkMode: themeProvider.isDarkMode,
-          onToggleDarkMode: themeProvider.toggleTheme,
-          responsive: responsive,
-        ),
-        body: const Home(),
-      ),
+      home: const Home(),
     );
   }
 }
