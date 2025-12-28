@@ -46,8 +46,6 @@ class TournamentOption extends StatelessWidget {
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: _onTap,
-                  splashColor: AppColors.primaryGold.withValues(alpha: 0.12),
-                  highlightColor: AppColors.primaryGold.withValues(alpha: 0.1),
                 ),
               ),
             ],
