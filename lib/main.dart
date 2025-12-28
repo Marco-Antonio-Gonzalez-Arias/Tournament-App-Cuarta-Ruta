@@ -34,7 +34,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme(
-        isDarkMode: themeProvider.isDarkMode,
+        isDarkMode: themeProvider.isDarkMode(context),
         responsive: responsive,
       ).theme(),
       builder: (context, child) => BorderDecorator(child: child!),

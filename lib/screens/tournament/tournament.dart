@@ -1,6 +1,6 @@
 import 'package:cuarta_ruta_app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
-import 'package:cuarta_ruta_app/core/widgets/app_bar.dart';
+import 'package:cuarta_ruta_app/core/widgets/app_bar/app_bar.dart';
 import 'package:cuarta_ruta_app/screens/tournament/widgets/tournament_option.dart';
 
 class Tournament extends StatelessWidget {
