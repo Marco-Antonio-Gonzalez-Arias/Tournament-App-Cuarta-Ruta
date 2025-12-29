@@ -1,4 +1,5 @@
 import 'package:cuarta_ruta_app/core/utils/responsive.dart';
+import 'package:cuarta_ruta_app/screens/tournament/tournament_creation_flow/tournament_creation_flow.dart';
 import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/widgets/app_bar/app_bar.dart';
 import 'package:cuarta_ruta_app/screens/tournament/widgets/tournament_option.dart';
@@ -40,8 +41,11 @@ class Tournament extends StatelessWidget {
   }
 
   static void _onCrear(BuildContext context) {
-    Navigator.pop(context);
-  }
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (_) => const TournamentCreationFlow()),
+  );
+}
 
   static void _onEscanear(BuildContext context) {
     Navigator.pop(context);
