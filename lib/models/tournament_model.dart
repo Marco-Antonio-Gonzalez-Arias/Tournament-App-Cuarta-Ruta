@@ -21,12 +21,14 @@ extension PhaseDisplay on Phases {
 
 class TournamentModel {
   final String id;
+  final String name;
   final Phases startPhase;
   final bool hasThirdPlace;
   final bool hasReplica;
   final Map<Phases, int> roundsConfig;
 
   TournamentModel({
+    required this.name,
     required this.startPhase,
     required this.hasThirdPlace,
     required this.hasReplica,
@@ -35,6 +37,7 @@ class TournamentModel {
 
   TournamentModel._internal({
     required this.id,
+    required this.name,
     required this.startPhase,
     required this.hasThirdPlace,
     required this.hasReplica,
@@ -42,6 +45,7 @@ class TournamentModel {
   });
 
   TournamentModel copyWith({
+    String? name,
     Phases? startPhase,
     bool? hasThirdPlace,
     bool? hasReplica,
@@ -49,6 +53,7 @@ class TournamentModel {
   }) {
     return TournamentModel._internal(
       id: id,
+      name: name ?? this.name,
       startPhase: startPhase ?? this.startPhase,
       hasThirdPlace: hasThirdPlace ?? this.hasThirdPlace,
       hasReplica: hasReplica ?? this.hasReplica,
@@ -59,6 +64,7 @@ class TournamentModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'name': name,
       'startPhase': startPhase.name,
       'hasThirdPlace': hasThirdPlace,
       'hasReplica': hasReplica,
@@ -70,6 +76,7 @@ class TournamentModel {
     final config = (json['roundsConfig'] as Map).cast<String, int>();
     return TournamentModel._internal(
       id: json['id'],
+      name: json['name'],
       startPhase: Phases.values.byName(json['startPhase']),
       hasThirdPlace: json['hasThirdPlace'],
       hasReplica: json['hasReplica'],

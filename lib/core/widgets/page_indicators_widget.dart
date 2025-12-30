@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 
-class PageIndicators extends StatelessWidget {
+class PageIndicatorsWidget extends StatelessWidget {
   final int currentPage;
   final int totalPages;
 
-  const PageIndicators({
+  const PageIndicatorsWidget({
     super.key,
     required this.currentPage,
     required this.totalPages,
@@ -17,16 +17,16 @@ class PageIndicators extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
         totalPages,
-        (index) => _PageDot(isActive: index == currentPage),
+        (index) => _PageDotWidget(isActive: index == currentPage),
       ),
     );
   }
 }
 
-class _PageDot extends StatelessWidget {
+class _PageDotWidget extends StatelessWidget {
   final bool isActive;
 
-  const _PageDot({required this.isActive});
+  const _PageDotWidget({required this.isActive});
 
   @override
   Widget build(BuildContext context) {

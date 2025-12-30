@@ -1,6 +1,6 @@
-import 'package:cuarta_ruta_app/core/providers/tournament_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cuarta_ruta_app/core/providers/tournament_provider.dart';
 import 'package:cuarta_ruta_app/core/widgets/app_bar/app_bar_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/button_widget.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
@@ -21,11 +21,7 @@ class TournamentCreationScreen extends StatelessWidget {
         body: const SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Column(
-            children: [
-              GeneralSettingsWidget(),
-              Divider(),
-              RoundsWidget(),
-            ],
+            children: [GeneralSettingsWidget(), Divider(), RoundsWidget()],
           ),
         ),
         bottomNavigationBar: const _StickyCreateButton(),
@@ -37,15 +33,71 @@ class TournamentCreationScreen extends StatelessWidget {
 class _StickyCreateButton extends StatelessWidget {
   const _StickyCreateButton();
 
-  Future<void> _handleSave(BuildContext context, TournamentProvider provider) async {
+  Future<void> _showNameModal(
+    BuildContext context,
+    TournamentProvider provider,
+  ) async {
+    final controller = TextEditingController();
+    final theme = Theme.of(context);
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: theme.colorScheme.surface,
+        title: Text('Nombre del Torneo', style: theme.textTheme.titleSmall),
+        content: TextField(
+          controller: controller,
+          style: theme.textTheme.bodySmall,
+          autofocus: true,
+          decoration: InputDecoration(
+            hintText: "Nombre...",
+            hintStyle: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurface.withAlpha(50),
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancelar', style: theme.textTheme.bodySmall),
+          ),
+          TextButton(
+            onPressed: () {
+              if (controller.text.trim().isNotEmpty) {
+                Navigator.pop(context);
+                _handleSave(context, provider, controller.text.trim());
+              }
+            },
+            child: Text(
+              'Guardar',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.primary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _handleSave(
+    BuildContext context,
+    TournamentProvider provider,
+    String name,
+  ) async {
     final tournament = TournamentModel(
+      name: name,
       startPhase: provider.selectedPhase,
       hasThirdPlace: provider.hasThirdPlace,
       hasReplica: provider.hasReplica,
       roundsConfig: provider.roundsConfig,
     );
+
     await TournamentStorageService().create(tournament);
-    if (context.mounted) Navigator.popUntil(context, (route) => route.isFirst);
+
+    if (context.mounted) {
+      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+    }
   }
 
   @override
@@ -61,8 +113,10 @@ class _StickyCreateButton extends StatelessWidget {
       ),
       child: ButtonWidget(
         label: 'Crear',
-        onPressed: () => _handleSave(context, provider),
-        textStyle: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface),
+        onPressed: () => _showNameModal(context, provider),
+        textStyle: theme.textTheme.bodySmall?.copyWith(
+          color: theme.colorScheme.onSurface,
+        ),
       ),
     );
   }
