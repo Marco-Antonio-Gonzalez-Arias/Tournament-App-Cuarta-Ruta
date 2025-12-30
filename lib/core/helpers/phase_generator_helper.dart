@@ -1,6 +1,6 @@
 import 'package:cuarta_ruta_app/models/tournament_model.dart';
 
-class PhaseGenerator {
+class PhaseGeneratorHelper {
   static List<Phases> generate(Phases startPhase, bool hasThirdPlace) {
     final phases = <Phases>[];
 

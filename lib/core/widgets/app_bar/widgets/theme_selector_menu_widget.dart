@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/config/theme/app_colors.dart';
 import 'package:cuarta_ruta_app/core/providers/theme_provider.dart';
-import 'package:cuarta_ruta_app/core/utils/responsive.dart';
+import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 
-class ThemeSelectorMenu extends StatelessWidget {
+class ThemeSelectorMenuWidget extends StatelessWidget {
   final ThemeProvider themeProvider;
 
-  const ThemeSelectorMenu({super.key, required this.themeProvider});
+  const ThemeSelectorMenuWidget({super.key, required this.themeProvider});
 
   @override
   Widget build(BuildContext context) {
-    final responsive = Responsive.of(context);
+    final responsive = ResponsiveUtil.of(context);
     final isDark = themeProvider.isDarkMode(context);
 
     return PopupMenuButton<ThemeModeOption>(

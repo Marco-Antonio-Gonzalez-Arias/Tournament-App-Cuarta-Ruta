@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:cuarta_ruta_app/core/utils/responsive.dart';
+import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/config/theme/app_colors.dart';
 
-class ToggleOption extends StatelessWidget {
+class ToggleOptionWidget extends StatelessWidget {
   final String label;
   final bool value;
   final ValueChanged<bool> onChanged;
   final TextStyle? textStyle;
 
-  const ToggleOption({
+  const ToggleOptionWidget({
     super.key,
     required this.label,
     required this.value,
@@ -18,7 +18,7 @@ class ToggleOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final res = Responsive.of(context);
+    final res = ResponsiveUtil.of(context);
     final theme = Theme.of(context);
 
     return Container(
@@ -32,7 +32,7 @@ class ToggleOption extends StatelessWidget {
     );
   }
 
-  BoxDecoration _buildDecoration(Responsive res) {
+  BoxDecoration _buildDecoration(ResponsiveUtil res) {
     return BoxDecoration(
       border: Border.all(
         color: AppColors.primaryGold,
@@ -42,7 +42,7 @@ class ToggleOption extends StatelessWidget {
     );
   }
 
-  Widget _buildLabelArea(Responsive res, ThemeData theme) {
+  Widget _buildLabelArea(ResponsiveUtil res, ThemeData theme) {
     final style = textStyle ?? 
         theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface);
 
@@ -56,7 +56,7 @@ class ToggleOption extends StatelessWidget {
     );
   }
 
-  Widget _buildToggleArea(Responsive res, ThemeData theme) {
+  Widget _buildToggleArea(ResponsiveUtil res, ThemeData theme) {
     return GestureDetector(
       onTap: () => onChanged(!value),
       child: Container(
@@ -68,7 +68,7 @@ class ToggleOption extends StatelessWidget {
     );
   }
 
-  Widget _buildCheckIcon(Responsive res) {
+  Widget _buildCheckIcon(ResponsiveUtil res) {
     return Icon(
       Icons.check,
       size: res.dp(4),

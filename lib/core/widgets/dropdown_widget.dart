@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cuarta_ruta_app/core/utils/responsive.dart';
+import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/config/theme/app_colors.dart';
 
-class Dropdown<T> extends StatelessWidget {
+class DropdownWidget<T> extends StatelessWidget {
   final T value;
   final List<T> items;
   final String label;
@@ -10,7 +10,7 @@ class Dropdown<T> extends StatelessWidget {
   final String Function(T) itemLabelBuilder;
   final TextStyle? textStyle;
 
-  const Dropdown({
+  const DropdownWidget({
     super.key,
     required this.value,
     required this.items,
@@ -22,7 +22,7 @@ class Dropdown<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final res = Responsive.of(context);
+    final res = ResponsiveUtil.of(context);
     final theme = Theme.of(context);
 
     return Container(
@@ -42,14 +42,14 @@ class Dropdown<T> extends StatelessWidget {
     );
   }
 
-  BoxDecoration _buildDecoration(Responsive res) {
+  BoxDecoration _buildDecoration(ResponsiveUtil res) {
     return BoxDecoration(
       border: Border.all(color: AppColors.primaryGold, width: res.dp(0.5)),
       borderRadius: BorderRadius.circular(res.dp(1)),
     );
   }
 
-  Widget _buildIcon(Responsive res) {
+  Widget _buildIcon(ResponsiveUtil res) {
     return Container(
       width: res.wp(20),
       height: res.hp(8),

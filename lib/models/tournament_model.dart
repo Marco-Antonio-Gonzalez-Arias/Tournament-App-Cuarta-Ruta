@@ -2,6 +2,23 @@ import 'package:uuid/uuid.dart';
 
 enum Phases { faseFinal, tercerPuesto, semifinales, cuartos, octavos }
 
+extension PhaseDisplay on Phases {
+  String get displayName {
+    switch (this) {
+      case Phases.octavos:
+        return 'Octavos';
+      case Phases.cuartos:
+        return 'Cuartos';
+      case Phases.semifinales:
+        return 'Semifinales';
+      case Phases.tercerPuesto:
+        return 'Tercer Puesto';
+      case Phases.faseFinal:
+        return 'Final';
+    }
+  }
+}
+
 class TournamentModel {
   final String id;
   final Phases startPhase;

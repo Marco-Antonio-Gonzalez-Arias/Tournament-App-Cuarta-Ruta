@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class LogoImage extends StatelessWidget {
+class LogoImageWidget extends StatelessWidget {
   final double _height;
 
-  const LogoImage({super.key, required double height}) : _height = height;
+  const LogoImageWidget({super.key, required double height}) : _height = height;
 
   @override
   Widget build(BuildContext context) {

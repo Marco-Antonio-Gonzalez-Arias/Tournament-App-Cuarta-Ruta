@@ -1,13 +1,13 @@
 import 'package:cuarta_ruta_app/core/config/theme/app_colors.dart';
-import 'package:cuarta_ruta_app/core/utils/responsive.dart';
+import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:flutter/material.dart';
 
-class Button extends StatelessWidget {
+class ButtonWidget extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
   final TextStyle? textStyle;
 
-  const Button({
+  const ButtonWidget({
     super.key,
     required this.label,
     required this.onPressed,
@@ -16,7 +16,7 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final responsive = Responsive.of(context);
+    final responsive = ResponsiveUtil.of(context);
 
     return SizedBox(
       width: double.infinity,

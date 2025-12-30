@@ -1,9 +1,9 @@
 import 'package:cuarta_ruta_app/core/providers/theme_provider.dart';
-import 'package:cuarta_ruta_app/core/utils/responsive.dart';
-import 'package:cuarta_ruta_app/core/widgets/border_decorator.dart';
+import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
+import 'package:cuarta_ruta_app/core/widgets/border_decorator_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:cuarta_ruta_app/core/config/theme/app_theme.dart';
-import 'package:cuarta_ruta_app/screens/home.dart';
+import 'package:cuarta_ruta_app/core/config/theme/app_theme_config.dart';
+import 'package:cuarta_ruta_app/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
@@ -29,17 +29,17 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = context.watch<ThemeProvider>();
-    final responsive = Responsive.of(context);
+    final responsive = ResponsiveUtil.of(context);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: AppTheme(
+      theme: AppThemeConfig(
         isDarkMode: themeProvider.isDarkMode(context),
         responsive: responsive,
       ).theme(),
-      builder: (context, child) => BorderDecorator(child: child!),
+      builder: (context, child) => BorderDecoratorWidget(child: child!),
       title: 'Cuarta Ruta App',
-      home: const Home(),
+      home: const HomeScreen(),
     );
   }
 }

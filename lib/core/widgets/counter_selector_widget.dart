@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cuarta_ruta_app/core/utils/responsive.dart';
+import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/config/theme/app_colors.dart';
 
-class CounterSelector extends StatelessWidget {
+class CounterSelectorWidget extends StatelessWidget {
   final String label;
   final int count;
   final VoidCallback onIncrement;
@@ -11,7 +11,7 @@ class CounterSelector extends StatelessWidget {
   final int min;
   final int? max;
 
-  const CounterSelector({
+  const CounterSelectorWidget({
     super.key,
     required this.label,
     required this.count,
@@ -24,7 +24,7 @@ class CounterSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final res = Responsive.of(context);
+    final res = ResponsiveUtil.of(context);
     final theme = Theme.of(context);
 
     final canDecrement = count > min;
@@ -43,14 +43,14 @@ class CounterSelector extends StatelessWidget {
     );
   }
 
-  BoxDecoration _buildDecoration(Responsive res) {
+  BoxDecoration _buildDecoration(ResponsiveUtil res) {
     return BoxDecoration(
       border: Border.all(color: AppColors.primaryGold, width: res.dp(0.3)),
       borderRadius: BorderRadius.circular(res.dp(1)),
     );
   }
 
-  Widget _buildLabelArea(Responsive res, ThemeData theme) {
+  Widget _buildLabelArea(ResponsiveUtil res, ThemeData theme) {
     final style = textStyle ??
         theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface);
 
@@ -65,7 +65,7 @@ class CounterSelector extends StatelessWidget {
     );
   }
 
-  Widget _buildCounterArea(Responsive res, ThemeData theme) {
+  Widget _buildCounterArea(ResponsiveUtil res, ThemeData theme) {
     return Container(
       width: res.wp(15),
       height: res.hp(8),
@@ -84,7 +84,7 @@ class CounterSelector extends StatelessWidget {
   Widget _buildActionButton(
     IconData icon,
     VoidCallback action,
-    Responsive res,
+    ResponsiveUtil res,
     ThemeData theme,
     bool enabled,
   ) {
