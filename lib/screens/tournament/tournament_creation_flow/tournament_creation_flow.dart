@@ -1,5 +1,5 @@
-import 'package:cuarta_ruta_app/screens/tournament/phases/phases.dart';
-import 'package:cuarta_ruta_app/screens/tournament/rounds/rounds.dart';
+import 'package:cuarta_ruta_app/screens/tournament/creation/phases.dart';
+import 'package:cuarta_ruta_app/screens/tournament/creation/rounds.dart';
 import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/widgets/app_bar/app_bar.dart';
 import 'package:cuarta_ruta_app/models/tournament_model.dart';
@@ -13,7 +13,7 @@ class TournamentCreationFlow extends StatefulWidget {
 
 class _TournamentCreationFlowState extends State<TournamentCreationFlow> {
   final PageController _pageController = PageController();
-  Phases? _selectedPhase;
+  Phases _selectedPhase = Phases.octavos;
   bool _hasThirdPlace = false;
   bool _hasReplica = false;
 
@@ -23,16 +23,24 @@ class _TournamentCreationFlowState extends State<TournamentCreationFlow> {
     super.dispose();
   }
 
-  void _goToRounds(Phases phase, bool hasThird, bool hasReplica) {
+  void _updateTournamentState(Phases phase, bool hasThird, bool hasReplica) {
     setState(() {
       _selectedPhase = phase;
       _hasThirdPlace = hasThird;
       _hasReplica = hasReplica;
     });
+  }
+
+  void _navigateToNextPage() {
     _pageController.nextPage(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
+  }
+
+  void _handlePhaseSelection(Phases phase, bool hasThird, bool hasReplica) {
+    _updateTournamentState(phase, hasThird, hasReplica);
+    _navigateToNextPage();
   }
 
   @override
@@ -42,16 +50,19 @@ class _TournamentCreationFlowState extends State<TournamentCreationFlow> {
       body: PageView(
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),
-        children: [
-          PhasesScreen(onNext: _goToRounds),
-          if (_selectedPhase != null)
-            RoundsScreen(
-              startPhase: _selectedPhase!,
-              hasThirdPlace: _hasThirdPlace,
-              hasReplica: _hasReplica,
-            ),
-        ],
+        children: _buildScreens(),
       ),
     );
+  }
+
+  List<Widget> _buildScreens() {
+    return [
+      PhasesScreen(onNext: _handlePhaseSelection),
+      RoundsScreen(
+        startPhase: _selectedPhase,
+        hasThirdPlace: _hasThirdPlace,
+        hasReplica: _hasReplica,
+      ),
+    ];
   }
 }
