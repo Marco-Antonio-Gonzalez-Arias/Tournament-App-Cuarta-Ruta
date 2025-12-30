@@ -13,7 +13,7 @@ class TournamentCreationFlow extends StatefulWidget {
 
 class _TournamentCreationFlowState extends State<TournamentCreationFlow> {
   final PageController _pageController = PageController();
-  StartingPhase? _selectedPhase;
+  Phases? _selectedPhase;
   bool _hasThirdPlace = false;
   bool _hasReplica = false;
 
@@ -23,13 +23,12 @@ class _TournamentCreationFlowState extends State<TournamentCreationFlow> {
     super.dispose();
   }
 
-  void _goToRounds(StartingPhase phase, bool hasThird, bool hasReplica) {
+  void _goToRounds(Phases phase, bool hasThird, bool hasReplica) {
     setState(() {
       _selectedPhase = phase;
       _hasThirdPlace = hasThird;
       _hasReplica = hasReplica;
     });
-    
     _pageController.nextPage(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
@@ -42,6 +41,7 @@ class _TournamentCreationFlowState extends State<TournamentCreationFlow> {
       appBar: const MyAppBar(title: "Crear Torneo"),
       body: PageView(
         controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
         children: [
           PhasesScreen(onNext: _goToRounds),
           if (_selectedPhase != null)

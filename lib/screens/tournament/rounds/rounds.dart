@@ -9,27 +9,21 @@ import 'package:cuarta_ruta_app/core/services/tournament_storage_service.dart';
 import 'package:cuarta_ruta_app/screens/tournament/widgets/page_indicators_row.dart';
 
 class RoundsScreen extends StatefulWidget {
-  final StartingPhase startPhase;
+  final Phases startPhase;
   final bool hasThirdPlace;
   final bool hasReplica;
 
-  const RoundsScreen({
-    super.key,
-    required this.startPhase,
-    required this.hasThirdPlace,
-    required this.hasReplica,
-  });
+  const RoundsScreen({super.key, required this.startPhase, required this.hasThirdPlace, required this.hasReplica});
 
   @override
   State<RoundsScreen> createState() => _RoundsScreenState();
 }
 
 class _RoundsScreenState extends State<RoundsScreen> {
-  final Map<String, int> _roundsConfig = {};
+  final Map<Phases, int> _roundsConfig = {};
   final _storageService = TournamentStorageService();
 
-  List<String> get _phases =>
-      PhaseGenerator.generatePhases(widget.startPhase, widget.hasThirdPlace);
+  List<Phases> get _phases => PhaseGenerator.generate(widget.startPhase, widget.hasThirdPlace);
 
   @override
   void initState() {
@@ -50,32 +44,19 @@ class _RoundsScreenState extends State<RoundsScreen> {
       hasReplica: widget.hasReplica,
       roundsConfig: _roundsConfig,
     );
-
-    await _storageService.saveTournament(tournament);
-
-    if (mounted) {
-      Navigator.popUntil(context, (route) => route.isFirst);
-    }
+    await _storageService.create(tournament);
+    if (mounted) Navigator.popUntil(context, (route) => route.isFirst);
   }
 
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
-
     return Container(
       color: AppColors.backgroundBlack,
-      padding: EdgeInsets.symmetric(
-        horizontal: responsive.wp(10),
-        vertical: responsive.hp(5),
-      ),
+      padding: EdgeInsets.symmetric(horizontal: responsive.wp(10), vertical: responsive.hp(5)),
       child: Column(
         children: [
-          Text(
-            'RONDAS',
-            style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                  color: AppColors.primaryWhite,
-                ),
-          ),
+          Text('RONDAS', style: Theme.of(context).textTheme.displayMedium?.copyWith(color: AppColors.primaryWhite)),
           SizedBox(height: responsive.hp(5)),
           Expanded(
             child: ListView.separated(
@@ -86,6 +67,10 @@ class _RoundsScreenState extends State<RoundsScreen> {
                 return RoundSelector(
                   phase: phase,
                   rounds: _roundsConfig[phase]!,
+                  onIncrement: () => setState(() => _roundsConfig[phase] = _roundsConfig[phase]! + 1),
+                  onDecrement: () => setState(() {
+                    if (_roundsConfig[phase]! > 1) _roundsConfig[phase] = _roundsConfig[phase]! - 1;
+                  }),
                 );
               },
             ),

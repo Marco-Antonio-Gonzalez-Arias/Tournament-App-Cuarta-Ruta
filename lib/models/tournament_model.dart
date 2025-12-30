@@ -1,80 +1,62 @@
-import 'dart:convert';
 import 'package:uuid/uuid.dart';
 
-enum StartingPhase { 
-  octavos, 
-  cuartos, 
-  semifinales,
-}
-
-extension StartingPhaseExtension on StartingPhase {
-  String get displayName {
-    switch (this) {
-      case StartingPhase.octavos:
-        return 'Octavos';
-      case StartingPhase.cuartos:
-        return 'Cuartos';
-      case StartingPhase.semifinales:
-        return 'Semifinales';
-    }
-  }
-}
+enum Phases { faseFinal, tercerPuesto, semifinales, cuartos, octavos }
 
 class TournamentModel {
   final String id;
-  final StartingPhase startPhase;
+  final Phases startPhase;
   final bool hasThirdPlace;
   final bool hasReplica;
-  final Map<String, int> roundsConfig; // String en lugar de enum para JSON
+  final Map<Phases, int> roundsConfig;
 
   TournamentModel({
-    String? id,
     required this.startPhase,
     required this.hasThirdPlace,
     required this.hasReplica,
     required this.roundsConfig,
-  }) : id = id ?? const Uuid().v4();
+  }) : id = const Uuid().v4();
 
-  // Serialización a JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'startPhase': startPhase.index,
-      'hasThirdPlace': hasThirdPlace,
-      'hasReplica': hasReplica,
-      'roundsConfig': roundsConfig,
-    };
-  }
-
-  // Deserialización desde JSON
-  factory TournamentModel.fromJson(Map<String, dynamic> json) {
-    return TournamentModel(
-      id: json['id'],
-      startPhase: StartingPhase.values[json['startPhase']],
-      hasThirdPlace: json['hasThirdPlace'],
-      hasReplica: json['hasReplica'],
-      roundsConfig: Map<String, int>.from(json['roundsConfig']),
-    );
-  }
-
-  String toJsonString() => jsonEncode(toJson());
-
-  factory TournamentModel.fromJsonString(String jsonString) {
-    return TournamentModel.fromJson(jsonDecode(jsonString));
-  }
+  TournamentModel._internal({
+    required this.id,
+    required this.startPhase,
+    required this.hasThirdPlace,
+    required this.hasReplica,
+    required this.roundsConfig,
+  });
 
   TournamentModel copyWith({
-    StartingPhase? startPhase,
+    Phases? startPhase,
     bool? hasThirdPlace,
     bool? hasReplica,
-    Map<String, int>? roundsConfig,
+    Map<Phases, int>? roundsConfig,
   }) {
-    return TournamentModel(
+    return TournamentModel._internal(
       id: id,
       startPhase: startPhase ?? this.startPhase,
       hasThirdPlace: hasThirdPlace ?? this.hasThirdPlace,
       hasReplica: hasReplica ?? this.hasReplica,
       roundsConfig: roundsConfig ?? this.roundsConfig,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'startPhase': startPhase.name,
+      'hasThirdPlace': hasThirdPlace,
+      'hasReplica': hasReplica,
+      'roundsConfig': roundsConfig.map((k, v) => MapEntry(k.name, v)),
+    };
+  }
+
+  factory TournamentModel.fromJson(Map<String, dynamic> json) {
+    final config = (json['roundsConfig'] as Map).cast<String, int>();
+    return TournamentModel._internal(
+      id: json['id'],
+      startPhase: Phases.values.byName(json['startPhase']),
+      hasThirdPlace: json['hasThirdPlace'],
+      hasReplica: json['hasReplica'],
+      roundsConfig: config.map((k, v) => MapEntry(Phases.values.byName(k), v)),
     );
   }
 }

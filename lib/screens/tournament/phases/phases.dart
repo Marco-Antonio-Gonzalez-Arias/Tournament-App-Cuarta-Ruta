@@ -7,19 +7,15 @@ import 'package:cuarta_ruta_app/models/tournament_model.dart';
 import 'package:cuarta_ruta_app/screens/tournament/widgets/page_indicators_row.dart';
 
 class PhasesScreen extends StatefulWidget {
-  final Function(StartingPhase, bool, bool) onNext;
-
-  const PhasesScreen({
-    super.key,
-    required this.onNext,
-  });
+  final Function(Phases, bool, bool) onNext;
+  const PhasesScreen({super.key, required this.onNext});
 
   @override
   State<PhasesScreen> createState() => _PhasesScreenState();
 }
 
 class _PhasesScreenState extends State<PhasesScreen> {
-  StartingPhase? _selectedPhase;
+  Phases? _selectedPhase;
   bool _hasThirdPlace = false;
   bool _hasReplica = false;
 
@@ -32,7 +28,6 @@ class _PhasesScreenState extends State<PhasesScreen> {
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
-
     return GestureDetector(
       onHorizontalDragEnd: _handleSwipe,
       child: Container(
@@ -43,12 +38,7 @@ class _PhasesScreenState extends State<PhasesScreen> {
         ),
         child: Column(
           children: [
-            Text(
-              'FASES',
-              style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                    color: AppColors.primaryWhite,
-                  ),
-            ),
+            Text('FASES', style: Theme.of(context).textTheme.displayMedium?.copyWith(color: AppColors.primaryWhite)),
             SizedBox(height: responsive.hp(5)),
             PhaseDropdown(
               selectedPhase: _selectedPhase,

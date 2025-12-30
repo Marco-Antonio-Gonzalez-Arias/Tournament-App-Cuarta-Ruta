@@ -3,53 +3,43 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cuarta_ruta_app/models/tournament_model.dart';
 
 class TournamentStorageService {
-  static const String _tournamentsKey = 'tournaments';
+  static const String _key = 'tournaments';
 
-  // Guardar torneo
-  Future<void> saveTournament(TournamentModel tournament) async {
-    final prefs = await SharedPreferences.getInstance();
-    final tournaments = await getAllTournaments();
-    
-    // Busca si ya existe y actualiza, si no, agrega
-    final index = tournaments.indexWhere((t) => t.id == tournament.id);
+  Future<void> create(TournamentModel tournament) async {
+    final list = await getAll();
+    list.add(tournament);
+    await _save(list);
+  }
+
+  Future<void> update(TournamentModel tournament) async {
+    final list = await getAll();
+    final index = list.indexWhere((t) => t.id == tournament.id);
     if (index != -1) {
-      tournaments[index] = tournament;
-    } else {
-      tournaments.add(tournament);
-    }
-    
-    final jsonList = tournaments.map((t) => t.toJson()).toList();
-    await prefs.setString(_tournamentsKey, jsonEncode(jsonList));
-  }
-
-  // Obtener todos los torneos
-  Future<List<TournamentModel>> getAllTournaments() async {
-    final prefs = await SharedPreferences.getInstance();
-    final jsonString = prefs.getString(_tournamentsKey);
-    
-    if (jsonString == null) return [];
-    
-    final List<dynamic> jsonList = jsonDecode(jsonString);
-    return jsonList.map((json) => TournamentModel.fromJson(json)).toList();
-  }
-
-  // Obtener torneo por ID
-  Future<TournamentModel?> getTournamentById(String id) async {
-    final tournaments = await getAllTournaments();
-    try {
-      return tournaments.firstWhere((t) => t.id == id);
-    } catch (e) {
-      return null;
+      list[index] = tournament;
+      await _save(list);
     }
   }
 
-  // Eliminar torneo
-  Future<void> deleteTournament(String id) async {
+  Future<List<TournamentModel>> getAll() async {
     final prefs = await SharedPreferences.getInstance();
-    final tournaments = await getAllTournaments();
-    tournaments.removeWhere((t) => t.id == id);
-    
-    final jsonList = tournaments.map((t) => t.toJson()).toList();
-    await prefs.setString(_tournamentsKey, jsonEncode(jsonList));
+    final source = prefs.getString(_key);
+    return source == null ? [] : _decode(source);
+  }
+
+  Future<void> delete(String id) async {
+    final list = await getAll();
+    list.removeWhere((t) => t.id == id);
+    await _save(list);
+  }
+
+  Future<void> _save(List<TournamentModel> list) async {
+    final prefs = await SharedPreferences.getInstance();
+    final data = list.map((t) => t.toJson()).toList();
+    await prefs.setString(_key, jsonEncode(data));
+  }
+
+  List<TournamentModel> _decode(String source) {
+    final List decoded = jsonDecode(source);
+    return decoded.map((item) => TournamentModel.fromJson(item)).toList();
   }
 }
