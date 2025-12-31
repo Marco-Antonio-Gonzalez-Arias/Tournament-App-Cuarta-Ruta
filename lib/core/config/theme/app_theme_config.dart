@@ -1,12 +1,12 @@
-import 'package:cuarta_ruta_app/core/utils/responsive.dart';
+import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/config/theme/app_colors.dart';
 
-class AppTheme {
+class AppThemeConfig {
   final bool _isDarkMode;
-  final Responsive _responsive;
+  final ResponsiveUtil _responsive;
 
-  AppTheme({bool isDarkMode = false, required Responsive responsive})
+  AppThemeConfig({bool isDarkMode = false, required ResponsiveUtil responsive})
     : _isDarkMode = isDarkMode,
       _responsive = responsive;
 

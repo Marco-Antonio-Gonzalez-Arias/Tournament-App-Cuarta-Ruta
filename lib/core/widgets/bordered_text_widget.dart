@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class BorderedText extends StatelessWidget {
+class BorderedTextWidget extends StatelessWidget {
   final String _text;
   final TextStyle? _style;
   final double _strokeWidth;
   final Color _strokeColor;
   final Color _fillColor;
 
-  const BorderedText({
+  const BorderedTextWidget({
     super.key,
     required String text,
     TextStyle? style,

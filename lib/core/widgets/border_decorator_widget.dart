@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/config/theme/app_colors.dart';
-import 'package:cuarta_ruta_app/core/utils/responsive.dart';
+import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 
-class BorderDecorator extends StatelessWidget {
+class BorderDecoratorWidget extends StatelessWidget {
   final Widget child;
 
-  const BorderDecorator({super.key, required this.child});
+  const BorderDecoratorWidget({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
-    final responsive = Responsive.of(context);
+    final responsive = ResponsiveUtil.of(context);
 
     return SafeArea(
       child: Stack(
