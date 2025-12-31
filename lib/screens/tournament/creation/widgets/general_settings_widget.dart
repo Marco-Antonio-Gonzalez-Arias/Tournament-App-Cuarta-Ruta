@@ -20,7 +20,7 @@ class GeneralSettingsWidget extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'Configuración General',
+            'Ajustes Generales',
             textAlign: TextAlign.center,
             style: theme.textTheme.titleSmall?.copyWith(
               color: theme.colorScheme.onSurface,
@@ -28,7 +28,7 @@ class GeneralSettingsWidget extends StatelessWidget {
           ),
           SizedBox(height: res.hp(1)),
           DropdownWidget<Phases>(
-            label: 'Fases',
+            label: 'Fase Inicial',
             value: provider.selectedPhase,
             items: const [Phases.octavos, Phases.cuartos, Phases.semifinales],
             itemLabelBuilder: (phase) => phase.displayName,
@@ -76,7 +76,7 @@ class GeneralSettingsWidget extends StatelessWidget {
         ),
         SizedBox(height: res.hp(1)),
         ToggleOptionWidget(
-          label: 'Réplica',
+          label: 'Permitir Réplica',
           value: provider.hasReplica,
           onChanged: (val) => provider.updateSettings(
             provider.selectedPhase,

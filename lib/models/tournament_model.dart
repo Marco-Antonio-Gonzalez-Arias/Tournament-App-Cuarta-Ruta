@@ -83,4 +83,20 @@ class TournamentModel {
       roundsConfig: config.map((k, v) => MapEntry(Phases.values.byName(k), v)),
     );
   }
+
+  @override
+  String toString() {
+    final roundsFormatted = roundsConfig.entries
+        .map((entry) => '\t- ${entry.key.displayName}: ${entry.value}')
+        .join('\n');
+
+    return '''
+  [Torneo: $name]
+  ID:             $id
+  Fase Inicial:   ${startPhase.displayName}
+  Tercer Puesto:  ${hasThirdPlace ? 'Sí' : 'No'}
+  Réplica:        ${hasReplica ? 'Sí' : 'No'}
+  Rondas:
+$roundsFormatted''';
+  }
 }

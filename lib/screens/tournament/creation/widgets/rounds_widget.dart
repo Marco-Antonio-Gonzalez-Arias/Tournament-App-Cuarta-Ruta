@@ -21,7 +21,8 @@ class RoundsWidget extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'Rondas',
+            'Rondas por fase',
+            textAlign: TextAlign.center,
             style: theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.onSurface),
           ),
           SizedBox(height: res.hp(1)),

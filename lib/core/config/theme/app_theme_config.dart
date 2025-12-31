@@ -36,6 +36,10 @@ class AppThemeConfig {
       ),
       splashColor: AppColors.primaryGold.withAlpha(12),
       highlightColor: AppColors.primaryGold.withAlpha(10),
+      dividerColor: AppColors.primaryGold,
+      dividerTheme: DividerThemeData(
+        color: AppColors.primaryGold,
+      )
     );
   }
 

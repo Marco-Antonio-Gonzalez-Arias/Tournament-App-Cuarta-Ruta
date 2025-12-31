@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cuarta_ruta_app/core/widgets/app_bar/app_bar_widget.dart';
-import 'package:cuarta_ruta_app/core/widgets/menu_option_widget.dart'; // Import genérico
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
+import 'package:cuarta_ruta_app/core/widgets/app_bar/app_bar_widget.dart';
+import 'package:cuarta_ruta_app/core/widgets/menu_option_widget.dart';
+import 'package:cuarta_ruta_app/screens/tournament/list/tournament_list_screen.dart';
 import 'package:cuarta_ruta_app/screens/tournament/creation/tournament_creation_screen.dart';
 
 class TournamentMenuScreen extends StatelessWidget {
@@ -16,16 +17,21 @@ class TournamentMenuScreen extends StatelessWidget {
         child: Column(
           children: [
             MenuOptionWidget(
-              imagePath: 'assets/images/cargar.png',
-              label: 'Cargar',
-              onTap: () => Navigator.pop(context),
+              imagePath: 'assets/images/guardados.png',
+              label: 'Guardados',
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const TournamentListScreen()),
+              ),
             ),
             MenuOptionWidget(
               imagePath: 'assets/images/crear.png',
               label: 'Crear',
               onTap: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const TournamentCreationScreen()),
+                MaterialPageRoute(
+                  builder: (_) => const TournamentCreationScreen(),
+                ),
               ),
             ),
             MenuOptionWidget(

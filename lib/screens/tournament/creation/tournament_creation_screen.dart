@@ -1,3 +1,4 @@
+import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cuarta_ruta_app/core/providers/tournament_provider.dart';
@@ -11,14 +12,23 @@ class TournamentCreationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final res = ResponsiveUtil.of(context);
+    
     return ChangeNotifierProvider(
       create: (_) => TournamentProvider(),
-      child: const Scaffold(
-        appBar: AppBarWidget(title: "Configurar Torneo"),
+      child: Scaffold(
+        appBar: AppBarWidget(title: "Crear Torneo"),
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Column(
-            children: [GeneralSettingsWidget(), Divider(), RoundsWidget()],
+            children: [
+              const GeneralSettingsWidget(),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: res.wp(10)),
+                child: const Divider(),
+              ),
+              const RoundsWidget()
+              ],
           ),
         ),
         bottomNavigationBar: StickyCreateButton(),
