@@ -6,7 +6,7 @@ class PopupMenuWidget<T> extends StatelessWidget {
   final Widget icon;
   final Color? backgroundColor;
   final BoxConstraints? constraints;
-  final MainAxisAlignment itemAlignment;
+  final Alignment itemAlignment;
 
   const PopupMenuWidget({
     super.key,
@@ -15,7 +15,7 @@ class PopupMenuWidget<T> extends StatelessWidget {
     required this.icon,
     this.backgroundColor,
     this.constraints,
-    this.itemAlignment = MainAxisAlignment.start,
+    this.itemAlignment = Alignment.centerLeft,
   });
 
   @override
@@ -26,7 +26,17 @@ class PopupMenuWidget<T> extends StatelessWidget {
       tooltip: '',
       icon: icon,
       onSelected: onSelected,
-      itemBuilder: (context) => items,
+      itemBuilder: (context) => items.map((entry) {
+        if (entry is PopupMenuItem<T>) {
+          return PopupMenuItem<T>(
+            value: entry.value,
+            enabled: entry.enabled,
+            onTap: entry.onTap,
+            child: Align(alignment: itemAlignment, child: entry.child),
+          );
+        }
+        return entry;
+      }).toList(),
     );
   }
 }

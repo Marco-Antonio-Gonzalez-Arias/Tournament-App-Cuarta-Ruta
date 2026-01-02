@@ -13,14 +13,13 @@ class ThemeSelectorActionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = context.watch<ThemeProvider>();
 
-    return Center(
-      child: PopupMenuWidget<ThemeModeOption>(
-        icon: _buildIcon(context),
-        onSelected: provider.setThemeMode,
-        backgroundColor: _getBackgroundColor(context),
-        constraints: _getConstraints(context),
-        items: _buildMenuOptions(context, provider),
-      ),
+    return PopupMenuWidget<ThemeModeOption>(
+      icon: _buildIcon(context),
+      onSelected: provider.setThemeMode,
+      backgroundColor: _getBackgroundColor(context),
+      constraints: _getConstraints(context),
+      itemAlignment: Alignment.centerRight,
+      items: _buildMenuOptions(context, provider),
     );
   }
 

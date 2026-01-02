@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cuarta_ruta_app/core/widgets/page_dot_widget.dart';
+import 'package:cuarta_ruta_app/core/widgets/page_indicators/widgets/page_dot_widget.dart';
 
 class PageIndicatorsWidget extends StatelessWidget {
   final int currentPage;
