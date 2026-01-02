@@ -1,4 +1,5 @@
 import 'package:cuarta_ruta_app/core/providers/theme_provider.dart';
+import 'package:cuarta_ruta_app/core/services/tournament_storage_service.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/widgets/border_decorator_widget.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +7,12 @@ import 'package:cuarta_ruta_app/core/config/theme/app_theme_config.dart';
 import 'package:cuarta_ruta_app/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  final sharedPreferences = await SharedPreferences.getInstance();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -16,8 +20,13 @@ void main() async {
   ]);
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeProvider(),
+    MultiProvider(
+      providers: [
+        Provider<TournamentStorageService>(
+          create: (_) => TournamentStorageService(sharedPreferences),
+        ),
+        ChangeNotifierProvider(create: (_) => ThemeProvider(sharedPreferences)),
+      ],
       child: const MainApp(),
     ),
   );
@@ -28,18 +37,25 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = context.watch<ThemeProvider>();
-    final responsive = ResponsiveUtil.of(context);
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: AppThemeConfig(
-        isDarkMode: themeProvider.isDarkMode(context),
-        responsive: responsive,
-      ).theme(),
-      builder: (context, child) => BorderDecoratorWidget(child: child!),
       title: 'Cuarta Ruta App',
+      theme: _buildTheme(context),
+      builder: _applyGlobalDecorator,
       home: const HomeScreen(),
     );
+  }
+
+  ThemeData _buildTheme(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+
+    return AppThemeConfig(
+      isDarkMode: themeProvider.isDarkMode(context),
+      responsive: context.res,
+    ).theme();
+  }
+
+  Widget _applyGlobalDecorator(BuildContext context, Widget? child) {
+    return BorderDecoratorWidget(child: child!);
   }
 }

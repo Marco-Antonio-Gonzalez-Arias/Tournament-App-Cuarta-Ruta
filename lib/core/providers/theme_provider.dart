@@ -4,10 +4,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 enum ThemeModeOption { system, light, dark }
 
 class ThemeProvider extends ChangeNotifier {
+  final SharedPreferences _prefs;
+  static const String _themeKey = 'themeMode';
+
   ThemeModeOption _themeMode = ThemeModeOption.system;
   ThemeModeOption get themeMode => _themeMode;
 
-  ThemeProvider() {
+  ThemeProvider(this._prefs) {
     _loadTheme();
   }
 
@@ -18,17 +21,17 @@ class ThemeProvider extends ChangeNotifier {
     return _themeMode == ThemeModeOption.dark;
   }
 
-  Future<void> _loadTheme() async {
-    final prefs = await SharedPreferences.getInstance();
-    final index = prefs.getInt('themeMode') ?? 0;
+  void _loadTheme() {
+    final index = _prefs.getInt(_themeKey) ?? 0;
     _themeMode = ThemeModeOption.values[index];
     notifyListeners();
   }
 
-  void setThemeMode(ThemeModeOption option) async {
+  Future<void> setThemeMode(ThemeModeOption option) async {
+    if (_themeMode == option) return;
+
     _themeMode = option;
     notifyListeners();
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('themeMode', option.index);
+    await _prefs.setInt(_themeKey, option.index);
   }
 }

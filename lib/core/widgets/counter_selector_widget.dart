@@ -1,6 +1,8 @@
+import 'package:cuarta_ruta_app/core/utils/theme_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/config/theme/app_colors.dart';
+import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
+import 'package:cuarta_ruta_app/core/widgets/gold_card_decorator.dart';
 
 class CounterSelectorWidget extends StatelessWidget {
   final String label;
@@ -24,57 +26,51 @@ class CounterSelectorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final res = ResponsiveUtil.of(context);
     final theme = Theme.of(context);
-
     final canDecrement = count > min;
     final canIncrement = max == null || count < max!;
 
-    return Container(
-      decoration: _buildDecoration(res),
+    return GoldCardDecorator(
       child: Row(
         children: [
-          _buildLabelArea(res, theme),
-          _buildActionButton(Icons.remove, onDecrement, res, theme, canDecrement),
-          _buildCounterArea(res, theme),
-          _buildActionButton(Icons.add, onIncrement, res, theme, canIncrement),
+          Expanded(child: _buildLabelArea(context, theme)),
+          _buildActionButton(
+            context,
+            Icons.remove,
+            onDecrement,
+            theme,
+            canDecrement,
+          ),
+          _buildCounterArea(context, theme),
+          _buildActionButton(
+            context,
+            Icons.add,
+            onIncrement,
+            theme,
+            canIncrement,
+          ),
         ],
       ),
     );
   }
 
-  BoxDecoration _buildDecoration(ResponsiveUtil res) {
-    return BoxDecoration(
-      border: Border.all(color: AppColors.primaryGold, width: res.dp(0.3)),
-      borderRadius: BorderRadius.circular(res.dp(1)),
-    );
-  }
+  Widget _buildLabelArea(BuildContext context, ThemeData theme) => Container(
+    height: context.res.hp(8),
+    padding: EdgeInsets.only(left: context.res.wp(5)),
+    alignment: Alignment.centerLeft,
+    child: Text(label, style: textStyle ?? theme.textTheme.bodySmall),
+  );
 
-  Widget _buildLabelArea(ResponsiveUtil res, ThemeData theme) {
-    final style = textStyle ??
-        theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface);
-
-    return Expanded(
-      child: Container(
-        height: res.hp(8),
-        padding: EdgeInsets.only(left: res.wp(5)),
-        alignment: Alignment.centerLeft,
-        color: theme.scaffoldBackgroundColor,
-        child: Text(label, style: style),
-      ),
-    );
-  }
-
-  Widget _buildCounterArea(ResponsiveUtil res, ThemeData theme) {
+  Widget _buildCounterArea(BuildContext context, ThemeData theme) {
     return Container(
-      width: res.wp(15),
-      height: res.hp(8),
-      color: AppColors.primaryGold,
+      width: context.res.wp(15),
+      height: context.res.hp(8),
+      color: AppColors.primaryColor,
       alignment: Alignment.center,
       child: Text(
         '$count',
         style: theme.textTheme.bodyLarge?.copyWith(
-          color: AppColors.backgroundBlack,
+          color: AppColors.getTextColor(context.isDark),
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -82,24 +78,22 @@ class CounterSelectorWidget extends StatelessWidget {
   }
 
   Widget _buildActionButton(
+    BuildContext context,
     IconData icon,
     VoidCallback action,
-    ResponsiveUtil res,
     ThemeData theme,
     bool enabled,
-  ) {
-    return GestureDetector(
-      onTap: enabled ? action : null,
-      child: Container(
-        width: res.wp(12),
-        height: res.hp(8),
-        color: theme.scaffoldBackgroundColor,
-        child: Icon(
-          icon,
-          color: enabled ? AppColors.primaryGold : theme.disabledColor,
-          size: res.dp(3),
-        ),
+  ) => GestureDetector(
+    onTap: enabled ? action : null,
+    child: Container(
+      width: context.res.wp(12),
+      height: context.res.hp(8),
+      color: Colors.transparent,
+      child: Icon(
+        icon,
+        color: enabled ? AppColors.primaryColor : theme.disabledColor,
+        size: context.res.dp(3),
       ),
-    );
-  }
+    ),
+  );
 }

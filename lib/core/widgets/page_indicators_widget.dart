@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
+import 'package:cuarta_ruta_app/core/widgets/page_dot_widget.dart';
 
 class PageIndicatorsWidget extends StatelessWidget {
   final int currentPage;
@@ -15,36 +15,14 @@ class PageIndicatorsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(
-        totalPages,
-        (index) => _PageDotWidget(isActive: index == currentPage),
-      ),
+      children: _buildIndicators(),
     );
   }
-}
 
-class _PageDotWidget extends StatelessWidget {
-  final bool isActive;
-
-  const _PageDotWidget({required this.isActive});
-
-  @override
-  Widget build(BuildContext context) {
-    final res = ResponsiveUtil.of(context);
-    final theme = Theme.of(context);
-
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: res.wp(1)),
-      child: Container(
-        width: res.dp(1),
-        height: res.dp(1),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: isActive
-              ? theme.colorScheme.primary
-              : theme.colorScheme.primary.withAlpha(30),
-        ),
-      ),
+  List<Widget> _buildIndicators() {
+    return List.generate(
+      totalPages,
+      (index) => PageDotWidget(isActive: index == currentPage),
     );
   }
 }

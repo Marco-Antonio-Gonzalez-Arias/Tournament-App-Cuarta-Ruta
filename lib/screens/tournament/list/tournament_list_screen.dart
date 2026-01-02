@@ -1,10 +1,13 @@
-import 'package:cuarta_ruta_app/core/utils/logger_util.dart';
-import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
-import 'package:cuarta_ruta_app/screens/tournament/list/widgets/tournament_tile_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:cuarta_ruta_app/core/config/dimensions/app_dimensions.dart';
 import 'package:cuarta_ruta_app/core/services/tournament_storage_service.dart';
-import 'package:cuarta_ruta_app/core/widgets/app_bar/app_bar_widget.dart';
+import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
+import 'package:cuarta_ruta_app/core/widgets/app_bar_widget/app_bar_widget.dart';
+import 'package:cuarta_ruta_app/core/widgets/gold_card_decorator.dart';
 import 'package:cuarta_ruta_app/models/tournament_model.dart';
+import 'package:cuarta_ruta_app/screens/tournament/list/widgets/tournament_tile_widget.dart';
+import 'package:cuarta_ruta_app/screens/tournament/list/widgets/empty_tournaments_widget.dart';
+import 'package:provider/provider.dart';
 
 class TournamentListScreen extends StatefulWidget {
   const TournamentListScreen({super.key});
@@ -25,65 +28,63 @@ class _TournamentListScreenState extends State<TournamentListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarWidget(title: "Torneos Guardados"),
+      appBar: AppBarWidget(
+        title: "Torneos Guardados",
+        height: AppDimensions.appBarHeight(context.res),
+      ),
       body: _buildFutureBody(),
     );
   }
 
   Widget _buildFutureBody() {
+    final storageService = context.read<TournamentStorageService>();
+
     return FutureBuilder<List<TournamentModel>>(
-      future: TournamentStorageService().getAll(),
+      future: storageService.getAll(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
 
         final tournaments = snapshot.data ?? [];
+        if (tournaments.isEmpty) return const EmptyTournamentsWidget();
 
-        for (var tournament in tournaments) {
-          logger.d(tournament);
-        }
-
-        if (tournaments.isEmpty) {
-          return Center(
-            child: Text(
-              "No hay torneos guardados",
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          );
-        }
-
-        return _buildTournamentList(context, tournaments);
+        return _buildTournamentList(tournaments);
       },
     );
   }
 
-  Widget _buildTournamentList(
-    BuildContext context,
-    List<TournamentModel> tournaments,
-  ) {
-    final res = ResponsiveUtil.of(context);
-
+  Widget _buildTournamentList(List<TournamentModel> tournaments) {
     return ListView.separated(
-      padding: EdgeInsets.symmetric(horizontal: res.wp(10)),
+      padding: EdgeInsets.symmetric(
+        horizontal: context.res.wp(7),
+        vertical: context.res.hp(2),
+      ),
       itemCount: tournaments.length,
-      itemBuilder: (context, index) {
-        final controller = _controllers.putIfAbsent(index, () => ExpansibleController());
-
-        return TournamentTileWidget(
-          tournament: tournaments[index],
-          controller: controller,
-          onExpansionChanged: (isExpanded) {
-            if (isExpanded) {
-              for (var key in _controllers.keys) {
-                if (key != index) _controllers[key]?.collapse();
-              }
-            }
-          },
-        );
-      },
-      separatorBuilder: (context, index) =>
-          Divider(thickness: res.hp(0.4), height: res.hp(3)),
+      itemBuilder: (context, index) =>
+          _buildTournamentTile(index, tournaments[index]),
+      separatorBuilder: (context, index) => SizedBox(height: context.res.hp(1)),
     );
+  }
+
+  Widget _buildTournamentTile(int index, TournamentModel tournament) {
+    return GoldCardDecorator(
+      child: TournamentTileWidget(
+        tournament: tournament,
+        controller: _getController(index),
+        onExpansionChanged: (isExpanded) => _handleExpansion(index, isExpanded),
+      ),
+    );
+  }
+
+  ExpansibleController _getController(int index) {
+    return _controllers.putIfAbsent(index, () => ExpansibleController());
+  }
+
+  void _handleExpansion(int currentIndex, bool isExpanded) {
+    if (!isExpanded) return;
+    for (var controller in _controllers.values) {
+      if (controller != _controllers[currentIndex]) controller.collapse();
+    }
   }
 }

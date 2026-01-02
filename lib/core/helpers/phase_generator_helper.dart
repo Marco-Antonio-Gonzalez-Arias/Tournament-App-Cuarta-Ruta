@@ -2,14 +2,16 @@ import 'package:cuarta_ruta_app/models/tournament_model.dart';
 
 class PhaseGeneratorHelper {
   static List<Phases> generate(Phases startPhase, bool hasThirdPlace) {
-    final phases = <Phases>[];
+    final phases = Phases.values.where((p) {
+      if (p == Phases.tercerPuesto || p == Phases.faseFinal) return false;
+      return p.index <= startPhase.index;
+    }).toList();
 
-    if (startPhase.index >= Phases.octavos.index) phases.add(Phases.octavos);
-    if (startPhase.index >= Phases.cuartos.index) phases.add(Phases.cuartos);
-    phases.add(Phases.semifinales);
-    if (hasThirdPlace) phases.add(Phases.tercerPuesto);
-    phases.add(Phases.faseFinal);
+    final sortedPhases = phases.reversed.toList();
 
-    return phases;
+    if (hasThirdPlace) sortedPhases.add(Phases.tercerPuesto);
+    sortedPhases.add(Phases.faseFinal);
+
+    return sortedPhases;
   }
 }

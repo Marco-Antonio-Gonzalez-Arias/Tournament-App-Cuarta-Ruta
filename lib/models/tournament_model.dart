@@ -4,18 +4,14 @@ enum Phases { faseFinal, tercerPuesto, semifinales, cuartos, octavos }
 
 extension PhaseDisplay on Phases {
   String get displayName {
-    switch (this) {
-      case Phases.octavos:
-        return 'Octavos';
-      case Phases.cuartos:
-        return 'Cuartos';
-      case Phases.semifinales:
-        return 'Semifinales';
-      case Phases.tercerPuesto:
-        return 'Tercer Puesto';
-      case Phases.faseFinal:
-        return 'Final';
-    }
+    const names = {
+      Phases.octavos: 'Octavos',
+      Phases.cuartos: 'Cuartos',
+      Phases.semifinales: 'Semifinales',
+      Phases.tercerPuesto: 'Tercer Puesto',
+      Phases.faseFinal: 'Final',
+    };
+    return names[this] ?? name;
   }
 }
 
@@ -61,19 +57,8 @@ class TournamentModel {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'startPhase': startPhase.name,
-      'hasThirdPlace': hasThirdPlace,
-      'hasReplica': hasReplica,
-      'roundsConfig': roundsConfig.map((k, v) => MapEntry(k.name, v)),
-    };
-  }
-
   factory TournamentModel.fromJson(Map<String, dynamic> json) {
-    final config = (json['roundsConfig'] as Map).cast<String, int>();
+    final config = Map<String, int>.from(json['roundsConfig']);
     return TournamentModel._internal(
       id: json['id'],
       name: json['name'],
@@ -84,19 +69,12 @@ class TournamentModel {
     );
   }
 
-  @override
-  String toString() {
-    final roundsFormatted = roundsConfig.entries
-        .map((entry) => '\t- ${entry.key.displayName}: ${entry.value}')
-        .join('\n');
-
-    return '''
-  [Torneo: $name]
-  ID:             $id
-  Fase Inicial:   ${startPhase.displayName}
-  Tercer Puesto:  ${hasThirdPlace ? 'Sí' : 'No'}
-  Réplica:        ${hasReplica ? 'Sí' : 'No'}
-  Rondas:
-$roundsFormatted''';
-  }
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'startPhase': startPhase.name,
+    'hasThirdPlace': hasThirdPlace,
+    'hasReplica': hasReplica,
+    'roundsConfig': roundsConfig.map((k, v) => MapEntry(k.name, v)),
+  };
 }

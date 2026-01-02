@@ -1,9 +1,9 @@
-import 'package:cuarta_ruta_app/core/providers/tournament_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cuarta_ruta_app/core/providers/tournament_provider.dart';
+import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/widgets/dropdown_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/toggle_option_widget.dart';
-import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/models/tournament_model.dart';
 
 class GeneralSettingsWidget extends StatelessWidget {
@@ -11,81 +11,91 @@ class GeneralSettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final res = ResponsiveUtil.of(context);
-    final theme = Theme.of(context);
     final provider = context.watch<TournamentProvider>();
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: res.wp(10)),
+      padding: EdgeInsets.symmetric(horizontal: context.res.wp(10)),
       child: Column(
         children: [
-          Text(
-            'Ajustes Generales',
-            textAlign: TextAlign.center,
-            style: theme.textTheme.titleSmall?.copyWith(
-              color: theme.colorScheme.onSurface,
-            ),
-          ),
-          SizedBox(height: res.hp(1)),
-          DropdownWidget<Phases>(
-            label: 'Fase Inicial',
-            value: provider.selectedPhase,
-            items: const [Phases.octavos, Phases.cuartos, Phases.semifinales],
-            itemLabelBuilder: (phase) => phase.displayName,
-            onChanged: (val) {
-              if (val != null) {
-                provider.updateSettings(
-                  val,
-                  provider.hasThirdPlace,
-                  provider.hasReplica,
-                );
-              }
-            },
-            textStyle: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface,
-            ),
-          ),
-          SizedBox(height: res.hp(1)),
-          _buildOptions(context, res, theme, provider),
-          SizedBox(height: res.hp(1)),
+          _buildTitle(context),
+          SizedBox(height: context.res.hp(1)),
+          _buildPhaseDropdown(context, provider),
+          SizedBox(height: context.res.hp(1)),
+          _buildOptions(context, provider),
+          SizedBox(height: context.res.hp(1)),
         ],
       ),
     );
   }
 
-  Widget _buildOptions(
+  Widget _buildTitle(BuildContext context) {
+    return Text(
+      'Ajustes Generales',
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.bodyMedium,
+    );
+  }
+
+  Widget _buildPhaseDropdown(
     BuildContext context,
-    ResponsiveUtil res,
-    ThemeData theme,
     TournamentProvider provider,
   ) {
-    final style = theme.textTheme.bodySmall?.copyWith(
-      color: theme.colorScheme.onSurface,
+    return DropdownWidget<Phases>(
+      label: 'Fase Inicial',
+      value: provider.selectedPhase,
+      items: const [Phases.octavos, Phases.cuartos, Phases.semifinales],
+      itemLabelBuilder: (phase) => phase.displayName,
+      onChanged: (val) => _updatePhase(provider, val),
+      textStyle: Theme.of(context).textTheme.labelLarge,
     );
+  }
+
+  void _updatePhase(TournamentProvider provider, Phases? val) {
+    if (val != null) {
+      provider.updateSettings(val, provider.hasThirdPlace, provider.hasReplica);
+    }
+  }
+
+  Widget _buildOptions(BuildContext context, TournamentProvider provider) {
+    final style = Theme.of(context).textTheme.labelLarge;
     return Column(
       children: [
-        ToggleOptionWidget(
-          label: '3er Puesto',
-          value: provider.hasThirdPlace,
-          onChanged: (val) => provider.updateSettings(
+        _buildToggle(
+          '3er Puesto',
+          provider.hasThirdPlace,
+          style,
+          (val) => provider.updateSettings(
             provider.selectedPhase,
             val,
             provider.hasReplica,
           ),
-          textStyle: style,
         ),
-        SizedBox(height: res.hp(1)),
-        ToggleOptionWidget(
-          label: 'Permitir Réplica',
-          value: provider.hasReplica,
-          onChanged: (val) => provider.updateSettings(
+        SizedBox(height: context.res.hp(1)),
+        _buildToggle(
+          'Permitir Réplica',
+          provider.hasReplica,
+          style,
+          (val) => provider.updateSettings(
             provider.selectedPhase,
             provider.hasThirdPlace,
             val,
           ),
-          textStyle: style,
         ),
       ],
+    );
+  }
+
+  Widget _buildToggle(
+    String label,
+    bool value,
+    TextStyle? style,
+    ValueChanged<bool> onChanged,
+  ) {
+    return ToggleOptionWidget(
+      label: label,
+      value: value,
+      onChanged: onChanged,
+      textStyle: style,
     );
   }
 }

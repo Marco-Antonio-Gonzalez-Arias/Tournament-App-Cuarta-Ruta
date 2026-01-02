@@ -1,6 +1,8 @@
+import 'package:cuarta_ruta_app/core/utils/theme_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/config/theme/app_colors.dart';
+import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
+import 'package:cuarta_ruta_app/core/widgets/gold_card_decorator.dart';
 
 class ToggleOptionWidget extends StatelessWidget {
   final String label;
@@ -18,61 +20,40 @@ class ToggleOptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final res = ResponsiveUtil.of(context);
-    final theme = Theme.of(context);
-
-    return Container(
-      decoration: _buildDecoration(res),
+    return GoldCardDecorator(
       child: Row(
         children: [
-          _buildLabelArea(res, theme),
-          _buildToggleArea(res, theme),
+          Expanded(child: _buildLabel(context)),
+          _buildToggle(context),
         ],
       ),
     );
   }
 
-  BoxDecoration _buildDecoration(ResponsiveUtil res) {
-    return BoxDecoration(
-      border: Border.all(
-        color: AppColors.primaryGold,
-        width: res.dp(0.3),
-      ),
-      borderRadius: BorderRadius.circular(res.dp(1)),
-    );
-  }
+  Widget _buildLabel(BuildContext context) => Container(
+    height: context.res.hp(8),
+    alignment: Alignment.center,
+    child: Text(
+      label,
+      style: textStyle ?? Theme.of(context).textTheme.bodySmall,
+    ),
+  );
 
-  Widget _buildLabelArea(ResponsiveUtil res, ThemeData theme) {
-    final style = textStyle ?? 
-        theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface);
+  Widget _buildToggle(BuildContext context) => GestureDetector(
+    onTap: () => onChanged(!value),
+    child: Container(
+      width: context.res.wp(20),
+      height: context.res.hp(8),
+      color: value ? AppColors.primaryColor : Colors.transparent,
+      child: value ? _buildCheckIcon(context) : null,
+    ),
+  );
 
-    return Expanded(
-      child: Container(
-        height: res.hp(8),
-        color: theme.scaffoldBackgroundColor,
-        alignment: Alignment.center,
-        child: Text(label, style: style),
-      ),
-    );
-  }
-
-  Widget _buildToggleArea(ResponsiveUtil res, ThemeData theme) {
-    return GestureDetector(
-      onTap: () => onChanged(!value),
-      child: Container(
-        width: res.wp(20),
-        height: res.hp(8),
-        color: value ? AppColors.primaryGold : theme.scaffoldBackgroundColor,
-        child: value ? _buildCheckIcon(res) : null,
-      ),
-    );
-  }
-
-  Widget _buildCheckIcon(ResponsiveUtil res) {
+  Widget _buildCheckIcon(BuildContext context) {
     return Icon(
       Icons.check,
-      size: res.dp(4),
-      color: AppColors.backgroundBlack,
+      size: context.res.dp(4),
+      color: AppColors.getTextColor(context.isDark),
     );
   }
 }
