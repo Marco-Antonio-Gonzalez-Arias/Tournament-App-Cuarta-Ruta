@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cuarta_ruta_app/core/providers/tournament_provider.dart';
-import 'package:cuarta_ruta_app/core/services/tournament_storage_service.dart';
+import 'package:cuarta_ruta_app/core/services/tournament_storage_base.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/widgets/button_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/input_modal_widget.dart';
@@ -51,7 +51,7 @@ class StickyCreateButtonWidget extends StatelessWidget {
     TournamentProvider provider,
     String name,
   ) async {
-    final storage = context.read<TournamentStorageService>();
+    final storage = context.read<TournamentStorageBase>();
     await provider.createTournament(name, storage);
     if (context.mounted) _navigateToHome(context);
   }

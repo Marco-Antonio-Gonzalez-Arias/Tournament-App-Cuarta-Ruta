@@ -53,7 +53,7 @@ class TournamentProvider extends ChangeNotifier {
       startPhase: selectedPhase,
       hasThirdPlace: hasThirdPlace,
       hasReplica: hasReplica,
-      roundsConfig: roundsConfig,
+      roundsConfig: Map.from(_roundsConfig),
     );
 
     await storage.create(tournament);
