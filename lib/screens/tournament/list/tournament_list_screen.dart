@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:cuarta_ruta_app/core/config/dimensions/app_dimensions.dart';
-import 'package:cuarta_ruta_app/core/services/tournament_storage_service.dart';
+import 'package:cuarta_ruta_app/core/services/tournament_storage_base.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/widgets/app_bar_widget/app_bar_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/gold_card_decorator.dart';
 import 'package:cuarta_ruta_app/models/tournament_model.dart';
 import 'package:cuarta_ruta_app/screens/tournament/list/widgets/tournament_tile_widget.dart';
 import 'package:cuarta_ruta_app/screens/tournament/list/widgets/empty_tournaments_widget.dart';
-import 'package:provider/provider.dart';
 
 class TournamentListScreen extends StatefulWidget {
   const TournamentListScreen({super.key});
@@ -37,7 +37,7 @@ class _TournamentListScreenState extends State<TournamentListScreen> {
   }
 
   Widget _buildFutureBody() {
-    final storageService = context.read<TournamentStorageService>();
+    final storageService = context.read<TournamentStorageBase>();
 
     return FutureBuilder<List<TournamentModel>>(
       future: storageService.getAll(),

@@ -1,19 +1,22 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cuarta_ruta_app/core/services/tournament_storage_base.dart';
 import 'package:cuarta_ruta_app/models/tournament_model.dart';
 
-class TournamentStorageService {
+class TournamentStorageService implements TournamentStorageBase {
   final SharedPreferences _prefs;
   static const String _storageKey = 'tournaments';
 
   TournamentStorageService(this._prefs);
 
+  @override
   Future<void> create(TournamentModel tournament) async {
     final tournaments = await getAll();
     tournaments.add(tournament);
     await _save(tournaments);
   }
 
+  @override
   Future<void> update(TournamentModel tournament) async {
     final tournaments = await getAll();
     final index = tournaments.indexWhere((t) => t.id == tournament.id);
@@ -23,11 +26,13 @@ class TournamentStorageService {
     }
   }
 
+  @override
   Future<List<TournamentModel>> getAll() async {
     final source = _prefs.getString(_storageKey);
     return source == null ? [] : _decode(source);
   }
 
+  @override
   Future<void> delete(String id) async {
     final tournaments = await getAll();
     tournaments.removeWhere((t) => t.id == id);

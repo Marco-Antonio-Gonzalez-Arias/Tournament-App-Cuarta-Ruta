@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:cuarta_ruta_app/core/providers/tournament_provider.dart';
 import 'package:cuarta_ruta_app/core/helpers/phase_generator_helper.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
-import 'package:cuarta_ruta_app/models/tournament_model.dart';
+import 'package:cuarta_ruta_app/core/enums/phases.dart';
 import 'package:cuarta_ruta_app/core/widgets/counter_selector_widget.dart';
 
 class RoundsWidget extends StatelessWidget {

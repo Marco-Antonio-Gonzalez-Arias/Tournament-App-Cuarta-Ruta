@@ -1,4 +1,4 @@
-import 'package:cuarta_ruta_app/models/tournament_model.dart';
+import 'package:cuarta_ruta_app/core/enums/phases.dart';
 
 class PhaseGeneratorHelper {
   static List<Phases> generate(Phases startPhase, bool hasThirdPlace) {

@@ -1,26 +1,20 @@
 import 'package:uuid/uuid.dart';
+import 'package:cuarta_ruta_app/core/enums/phases.dart';
+import 'package:cuarta_ruta_app/models/tournament_base.dart';
 
-enum Phases { faseFinal, tercerPuesto, semifinales, cuartos, octavos }
-
-extension PhaseDisplay on Phases {
-  String get displayName {
-    const names = {
-      Phases.octavos: 'Octavos',
-      Phases.cuartos: 'Cuartos',
-      Phases.semifinales: 'Semifinales',
-      Phases.tercerPuesto: 'Tercer Puesto',
-      Phases.faseFinal: 'Final',
-    };
-    return names[this] ?? name;
-  }
-}
-
-class TournamentModel {
+class TournamentModel implements TournamentBase {
   final String id;
+  final DateTime createdAt;
+
+  @override
   final String name;
+  @override
   final Phases startPhase;
+  @override
   final bool hasThirdPlace;
+  @override
   final bool hasReplica;
+  @override
   final Map<Phases, int> roundsConfig;
 
   TournamentModel({
@@ -29,7 +23,8 @@ class TournamentModel {
     required this.hasThirdPlace,
     required this.hasReplica,
     required this.roundsConfig,
-  }) : id = const Uuid().v4();
+  }) : id = const Uuid().v4(),
+       createdAt = DateTime.now();
 
   TournamentModel._internal({
     required this.id,
@@ -38,6 +33,7 @@ class TournamentModel {
     required this.hasThirdPlace,
     required this.hasReplica,
     required this.roundsConfig,
+    required this.createdAt,
   });
 
   TournamentModel copyWith({
@@ -49,6 +45,7 @@ class TournamentModel {
   }) {
     return TournamentModel._internal(
       id: id,
+      createdAt: createdAt,
       name: name ?? this.name,
       startPhase: startPhase ?? this.startPhase,
       hasThirdPlace: hasThirdPlace ?? this.hasThirdPlace,
@@ -66,6 +63,9 @@ class TournamentModel {
       hasThirdPlace: json['hasThirdPlace'],
       hasReplica: json['hasReplica'],
       roundsConfig: config.map((k, v) => MapEntry(Phases.values.byName(k), v)),
+      createdAt: DateTime.parse(
+        json['createdAt'] ?? DateTime.now().toIso8601String(),
+      ),
     );
   }
 
@@ -76,5 +76,6 @@ class TournamentModel {
     'hasThirdPlace': hasThirdPlace,
     'hasReplica': hasReplica,
     'roundsConfig': roundsConfig.map((k, v) => MapEntry(k.name, v)),
+    'createdAt': createdAt.toIso8601String(),
   };
 }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
+import 'package:cuarta_ruta_app/core/enums/phases.dart';
 import 'package:cuarta_ruta_app/core/widgets/tournament_info_row_widget.dart';
-import 'package:cuarta_ruta_app/models/tournament_model.dart';
+import 'package:cuarta_ruta_app/models/tournament_base.dart';
 import 'package:cuarta_ruta_app/screens/tournament/list/widgets/tournament_tile_header.dart';
 
 class TournamentTileWidget extends StatelessWidget {
-  final TournamentModel tournament;
+  final TournamentBase tournament;
   final ExpansibleController? controller;
   final ValueChanged<bool>? onExpansionChanged;
 

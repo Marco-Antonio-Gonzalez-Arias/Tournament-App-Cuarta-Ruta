@@ -5,7 +5,6 @@ import 'package:cuarta_ruta_app/core/services/tournament_storage_service.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/widgets/button_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/input_modal_widget.dart';
-import 'package:cuarta_ruta_app/models/tournament_model.dart';
 
 class StickyCreateButtonWidget extends StatelessWidget {
   const StickyCreateButtonWidget({super.key});
@@ -52,21 +51,10 @@ class StickyCreateButtonWidget extends StatelessWidget {
     TournamentProvider provider,
     String name,
   ) async {
-    final tournament = _mapToModel(name, provider);
-    final storageService = context.read<TournamentStorageService>();
-
-    await storageService.create(tournament);
+    final storage = context.read<TournamentStorageService>();
+    await provider.createTournament(name, storage);
     if (context.mounted) _navigateToHome(context);
   }
-
-  TournamentModel _mapToModel(String name, TournamentProvider provider) =>
-      TournamentModel(
-        name: name,
-        startPhase: provider.selectedPhase,
-        hasThirdPlace: provider.hasThirdPlace,
-        hasReplica: provider.hasReplica,
-        roundsConfig: provider.roundsConfig,
-      );
 
   void _navigateToHome(BuildContext context) =>
       Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);

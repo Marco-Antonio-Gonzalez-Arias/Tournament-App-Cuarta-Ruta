@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cuarta_ruta_app/core/providers/tournament_provider.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
+import 'package:cuarta_ruta_app/core/enums/phases.dart';
 import 'package:cuarta_ruta_app/core/widgets/dropdown_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/toggle_option_widget.dart';
-import 'package:cuarta_ruta_app/models/tournament_model.dart';
 
 class GeneralSettingsWidget extends StatelessWidget {
   const GeneralSettingsWidget({super.key});
