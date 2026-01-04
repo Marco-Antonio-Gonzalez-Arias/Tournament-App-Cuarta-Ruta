@@ -39,6 +39,12 @@ class TournamentListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteTournament(String id) async {
+    await _storage.delete(id);
+    _tournaments.removeWhere((t) => t.id == id);
+    notifyListeners();
+  }
+
   void setSortOption(TournamentSortOptionEnum option) {
     _sortOption = option;
     _prefs.saveSortOption(option.name);

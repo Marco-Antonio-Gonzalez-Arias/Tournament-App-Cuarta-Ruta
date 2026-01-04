@@ -1,9 +1,14 @@
+import 'package:cuarta_ruta_app/core/providers/tournament_list_provider.dart';
+import 'package:cuarta_ruta_app/core/widgets/confirm_modal_widget.dart';
+import 'package:cuarta_ruta_app/models/tournament_model.dart';
 import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 import 'package:cuarta_ruta_app/core/widgets/tournament_info_row_widget.dart';
+import 'package:cuarta_ruta_app/core/widgets/button_widget.dart';
 import 'package:cuarta_ruta_app/models/tournament_base.dart';
 import 'package:cuarta_ruta_app/screens/tournament/list/widgets/tournament_tile_header_widget.dart';
+import 'package:provider/provider.dart';
 
 class TournamentTileWidget extends StatelessWidget {
   final TournamentBase tournament;
@@ -53,7 +58,49 @@ class TournamentTileWidget extends StatelessWidget {
     Divider(height: context.res.hp(2)),
     _buildSectionLabel(context, "Rondas por fase"),
     ..._buildRoundsList(),
+    _buildActionRow(context),
+    _buildGoToTournamentButton(),
   ];
+
+  Widget _buildActionRow(BuildContext context) => Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      _buildIconButton(context, Icons.edit, () {}),
+      _buildIconButton(context, Icons.delete, () => _onDeletePressed(context)),
+    ],
+  );
+
+  void _onDeletePressed(BuildContext context) async {
+    final model = _getValidModel();
+    if (model == null) return;
+
+    final confirmed = await _showConfirmDialog(context);
+
+    if (confirmed == true && context.mounted) {
+      context.read<TournamentListProvider>().deleteTournament(model.id);
+    }
+  }
+
+  TournamentModel? _getValidModel() =>
+      tournament is TournamentModel ? tournament as TournamentModel : null;
+
+  Future<bool?> _showConfirmDialog(BuildContext context) => showDialog<bool>(
+    context: context,
+    builder: (context) => const ConfirmModalWidget(
+      title: "Confirmar",
+      message: "¿Deseas eliminar este torneo de tu lista?",
+    ),
+  );
+
+  Widget _buildIconButton(
+    BuildContext context,
+    IconData icon,
+    VoidCallback onPressed,
+  ) => IconButton(
+    icon: Icon(icon, size: context.res.dp(2.5)),
+    color: Theme.of(context).colorScheme.primary,
+    onPressed: onPressed,
+  );
 
   Widget _buildSectionLabel(BuildContext context, String text) => Padding(
     padding: EdgeInsets.symmetric(vertical: context.res.hp(0.5)),
@@ -68,4 +115,7 @@ class TournamentTileWidget extends StatelessWidget {
         ),
       )
       .toList();
+
+  Widget _buildGoToTournamentButton() =>
+      ButtonWidget(label: "Ir al Torneo", onPressed: () {});
 }
