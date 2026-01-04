@@ -1,8 +1,12 @@
+import 'package:cuarta_ruta_app/core/services/app_preferences_base.dart';
+import 'package:cuarta_ruta_app/core/services/tournament_storage_base.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cuarta_ruta_app/core/config/dimensions/app_dimensions.dart';
-import 'package:cuarta_ruta_app/core/services/tournament_storage_base.dart';
+import 'package:cuarta_ruta_app/core/providers/tournament_list_provider.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
+import 'package:cuarta_ruta_app/core/enums/tournament_sort_option_enum.dart';
+import 'package:cuarta_ruta_app/core/widgets/popup_menu_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/app_bar_widget/app_bar_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/gold_card_decorator.dart';
 import 'package:cuarta_ruta_app/models/tournament_model.dart';
@@ -17,40 +21,80 @@ class TournamentListScreen extends StatefulWidget {
 }
 
 class _TournamentListScreenState extends State<TournamentListScreen> {
-  final Map<int, ExpansibleController> _controllers = {};
+  final Map<String, ExpansibleController> _controllers = {};
 
   @override
   void dispose() {
+    for (var controller in _controllers.values) {
+      controller.dispose();
+    }
     _controllers.clear();
     super.dispose();
   }
 
+  void _onSortChanged(
+    TournamentListProvider provider,
+    TournamentSortOptionEnum option,
+  ) {
+    for (var controller in _controllers.values) {
+      controller.collapse();
+    }
+    provider.setSortOption(option);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarWidget(
-        title: "Torneos Guardados",
-        height: AppDimensions.appBarHeight(context.res),
-      ),
-      body: _buildFutureBody(),
+    return ChangeNotifierProvider(
+      create: (_) => TournamentListProvider(
+        context.read<TournamentStorageBase>(),
+        context.read<AppPreferencesBase>(),
+      )..loadTournaments(),
+      builder: (context, child) {
+        final provider = context.watch<TournamentListProvider>();
+
+        return Scaffold(
+          appBar: AppBarWidget(
+            title: "Torneos Guardados",
+            height: AppDimensions.appBarHeight(context.res),
+            actions: [_buildSortMenu(provider)],
+          ),
+          body: provider.isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : provider.tournaments.isEmpty
+              ? const EmptyTournamentsWidget()
+              : _buildTournamentList(provider.tournaments),
+        );
+      },
     );
   }
 
-  Widget _buildFutureBody() {
-    final storageService = context.read<TournamentStorageBase>();
-
-    return FutureBuilder<List<TournamentModel>>(
-      future: storageService.getAll(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        final tournaments = snapshot.data ?? [];
-        if (tournaments.isEmpty) return const EmptyTournamentsWidget();
-
-        return _buildTournamentList(tournaments);
-      },
+  Widget _buildSortMenu(TournamentListProvider provider) {
+    return PopupMenuWidget<TournamentSortOptionEnum>(
+      icon: Icon(Icons.sort, size: context.res.dp(3)),
+      initialValue: provider.sortOption,
+      onSelected: (option) => _onSortChanged(provider, option),
+      constraints: BoxConstraints(minWidth: context.res.dp(20)),
+      textStyle: Theme.of(
+        context,
+      ).textTheme.labelSmall?.copyWith(fontSize: context.res.dp(1.5)),
+      items: const [
+        PopupMenuItem(
+          value: TournamentSortOptionEnum.nameAsc,
+          child: Text("A-Z"),
+        ),
+        PopupMenuItem(
+          value: TournamentSortOptionEnum.nameDesc,
+          child: Text("Z-A"),
+        ),
+        PopupMenuItem(
+          value: TournamentSortOptionEnum.dateNewest,
+          child: Text("Más reciente"),
+        ),
+        PopupMenuItem(
+          value: TournamentSortOptionEnum.dateOldest,
+          child: Text("Más antiguo"),
+        ),
+      ],
     );
   }
 
@@ -61,30 +105,34 @@ class _TournamentListScreenState extends State<TournamentListScreen> {
         vertical: context.res.hp(2),
       ),
       itemCount: tournaments.length,
-      itemBuilder: (context, index) =>
-          _buildTournamentTile(index, tournaments[index]),
-      separatorBuilder: (context, index) => SizedBox(height: context.res.hp(1)),
+      separatorBuilder: _buildSeparator,
+      itemBuilder: (context, index) => _buildTournamentItem(tournaments[index]),
     );
   }
 
-  Widget _buildTournamentTile(int index, TournamentModel tournament) {
+  Widget _buildTournamentItem(TournamentModel tournament) {
     return GoldCardDecorator(
       child: TournamentTileWidget(
         tournament: tournament,
-        controller: _getController(index),
-        onExpansionChanged: (isExpanded) => _handleExpansion(index, isExpanded),
+        controller: _controllers.putIfAbsent(
+          tournament.id,
+          () => ExpansibleController(),
+        ),
+        onExpansionChanged: (isExpanded) =>
+            _handleExpansion(tournament.id, isExpanded),
       ),
     );
   }
 
-  ExpansibleController _getController(int index) {
-    return _controllers.putIfAbsent(index, () => ExpansibleController());
+  Widget _buildSeparator(BuildContext context, int index) {
+    return SizedBox(height: context.res.hp(1));
   }
 
-  void _handleExpansion(int currentIndex, bool isExpanded) {
+  void _handleExpansion(String currentId, bool isExpanded) {
     if (!isExpanded) return;
-    for (var controller in _controllers.values) {
-      if (controller != _controllers[currentIndex]) controller.collapse();
+
+    for (var entry in _controllers.entries) {
+      if (entry.key != currentId) entry.value.collapse();
     }
   }
 }

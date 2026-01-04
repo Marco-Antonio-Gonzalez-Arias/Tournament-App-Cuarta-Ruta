@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cuarta_ruta_app/core/enums/phases.dart';
+import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 import 'package:cuarta_ruta_app/models/tournament_base.dart';
 
 class TournamentTileHeader extends StatelessWidget {

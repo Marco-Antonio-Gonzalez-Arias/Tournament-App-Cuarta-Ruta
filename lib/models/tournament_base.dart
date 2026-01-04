@@ -1,9 +1,9 @@
-import 'package:cuarta_ruta_app/core/enums/phases.dart';
+import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 
 abstract class TournamentBase {
   String get name;
-  Phases get startPhase;
+  PhasesEnum get startPhase;
   bool get hasThirdPlace;
   bool get hasReplica;
-  Map<Phases, int> get roundsConfig;
+  Map<PhasesEnum, int> get roundsConfig;
 }

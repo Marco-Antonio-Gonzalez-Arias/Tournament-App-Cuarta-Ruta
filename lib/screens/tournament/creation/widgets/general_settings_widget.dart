@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cuarta_ruta_app/core/providers/tournament_provider.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
-import 'package:cuarta_ruta_app/core/enums/phases.dart';
+import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 import 'package:cuarta_ruta_app/core/widgets/dropdown_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/toggle_option_widget.dart';
 
@@ -40,17 +40,17 @@ class GeneralSettingsWidget extends StatelessWidget {
     BuildContext context,
     TournamentProvider provider,
   ) {
-    return DropdownWidget<Phases>(
+    return DropdownWidget<PhasesEnum>(
       label: 'Fase Inicial',
       value: provider.selectedPhase,
-      items: const [Phases.octavos, Phases.cuartos, Phases.semifinales],
+      items: const [PhasesEnum.octavos, PhasesEnum.cuartos, PhasesEnum.semifinales],
       itemLabelBuilder: (phase) => phase.displayName,
       onChanged: (val) => _updatePhase(provider, val),
       textStyle: Theme.of(context).textTheme.labelLarge,
     );
   }
 
-  void _updatePhase(TournamentProvider provider, Phases? val) {
+  void _updatePhase(TournamentProvider provider, PhasesEnum? val) {
     if (val != null) {
       provider.updateSettings(val, provider.hasThirdPlace, provider.hasReplica);
     }

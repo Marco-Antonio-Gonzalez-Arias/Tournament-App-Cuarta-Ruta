@@ -33,7 +33,10 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         style: theme.textTheme.labelMedium,
         textAlign: TextAlign.center,
       ),
-      actions: actions ?? [const ThemeSelectorActionWidget()],
+      actions: [
+        if (actions != null) ...actions!,
+        const ThemeSelectorActionWidget(),
+      ],
     );
   }
 

@@ -1,5 +1,5 @@
 import 'package:uuid/uuid.dart';
-import 'package:cuarta_ruta_app/core/enums/phases.dart';
+import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 import 'package:cuarta_ruta_app/models/tournament_base.dart';
 
 class TournamentModel implements TournamentBase {
@@ -9,13 +9,13 @@ class TournamentModel implements TournamentBase {
   @override
   final String name;
   @override
-  final Phases startPhase;
+  final PhasesEnum startPhase;
   @override
   final bool hasThirdPlace;
   @override
   final bool hasReplica;
   @override
-  final Map<Phases, int> roundsConfig;
+  final Map<PhasesEnum, int> roundsConfig;
 
   TournamentModel({
     required this.name,
@@ -38,10 +38,10 @@ class TournamentModel implements TournamentBase {
 
   TournamentModel copyWith({
     String? name,
-    Phases? startPhase,
+    PhasesEnum? startPhase,
     bool? hasThirdPlace,
     bool? hasReplica,
-    Map<Phases, int>? roundsConfig,
+    Map<PhasesEnum, int>? roundsConfig,
   }) {
     return TournamentModel._internal(
       id: id,
@@ -59,10 +59,10 @@ class TournamentModel implements TournamentBase {
     return TournamentModel._internal(
       id: json['id'],
       name: json['name'],
-      startPhase: Phases.values.byName(json['startPhase']),
+      startPhase: PhasesEnum.values.byName(json['startPhase']),
       hasThirdPlace: json['hasThirdPlace'],
       hasReplica: json['hasReplica'],
-      roundsConfig: config.map((k, v) => MapEntry(Phases.values.byName(k), v)),
+      roundsConfig: config.map((k, v) => MapEntry(PhasesEnum.values.byName(k), v)),
       createdAt: DateTime.parse(
         json['createdAt'] ?? DateTime.now().toIso8601String(),
       ),

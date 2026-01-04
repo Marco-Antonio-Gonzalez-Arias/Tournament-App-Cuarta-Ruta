@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 
 class InputModalWidget extends StatefulWidget {
   final String title;
@@ -39,7 +40,10 @@ class _InputModalWidgetState extends State<InputModalWidget> {
     return AlertDialog(
       backgroundColor: theme.colorScheme.surface,
       title: _buildTitle(theme),
-      content: _buildTextField(theme),
+      content: SizedBox(
+        width: context.res.wp(80),
+        child: _buildTextField(theme),
+      ),
       actions: _buildActions(context, theme),
     );
   }

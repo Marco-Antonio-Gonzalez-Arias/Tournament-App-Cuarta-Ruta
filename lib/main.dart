@@ -1,3 +1,5 @@
+import 'package:cuarta_ruta_app/core/services/app_preferences_base.dart';
+import 'package:cuarta_ruta_app/core/services/app_preferences_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
@@ -23,6 +25,9 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        Provider<AppPreferencesBase>(
+          create: (_) => AppPreferencesService(sharedPreferences),
+        ),
         Provider<TournamentStorageBase>(
           create: (_) => TournamentStorageService(sharedPreferences),
         ),

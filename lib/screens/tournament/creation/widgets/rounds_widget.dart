@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:cuarta_ruta_app/core/providers/tournament_provider.dart';
 import 'package:cuarta_ruta_app/core/helpers/phase_generator_helper.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
-import 'package:cuarta_ruta_app/core/enums/phases.dart';
+import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 import 'package:cuarta_ruta_app/core/widgets/counter_selector_widget.dart';
 
 class RoundsWidget extends StatelessWidget {
@@ -40,7 +40,7 @@ class RoundsWidget extends StatelessWidget {
   List<Widget> _buildPhaseSelectors(
     BuildContext context,
     TournamentProvider provider,
-    List<Phases> phases,
+    List<PhasesEnum> phases,
   ) {
     return phases
         .map((phase) => _buildCounterItem(context, provider, phase))
@@ -50,7 +50,7 @@ class RoundsWidget extends StatelessWidget {
   Widget _buildCounterItem(
     BuildContext context,
     TournamentProvider provider,
-    Phases phase,
+    PhasesEnum phase,
   ) {
     return Padding(
       padding: EdgeInsets.only(bottom: context.res.hp(2)),

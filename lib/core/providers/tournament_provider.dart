@@ -1,46 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:cuarta_ruta_app/core/enums/phases.dart';
+import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 import 'package:cuarta_ruta_app/core/helpers/phase_generator_helper.dart';
 import 'package:cuarta_ruta_app/core/services/tournament_storage_base.dart';
 import 'package:cuarta_ruta_app/models/tournament_model.dart';
 
 class TournamentProvider extends ChangeNotifier {
-  Phases _selectedPhase = Phases.octavos;
+  PhasesEnum _selectedPhase = PhasesEnum.octavos;
   bool _hasThirdPlace = false;
   bool _hasReplica = true;
-  final Map<Phases, int> _roundsConfig = {};
+
+  final Map<PhasesEnum, int> _roundsConfig = {};
 
   TournamentProvider() {
     _initializeDefaultRounds();
   }
 
-  Phases get selectedPhase => _selectedPhase;
+  PhasesEnum get selectedPhase => _selectedPhase;
   bool get hasThirdPlace => _hasThirdPlace;
   bool get hasReplica => _hasReplica;
-  Map<Phases, int> get roundsConfig => _roundsConfig;
+  Map<PhasesEnum, int> get roundsConfig => _roundsConfig;
 
   void _initializeDefaultRounds() {
-    _roundsConfig.clear();
     final phases = PhaseGeneratorHelper.generate(
       _selectedPhase,
       _hasThirdPlace,
     );
-    for (var phase in phases) {
-      _roundsConfig[phase] = 1;
+
+    for (final phase in phases) {
+      _roundsConfig.putIfAbsent(phase, () => 1);
     }
   }
 
-  void updateSettings(Phases phase, bool third, bool replica) {
+  void updateSettings(PhasesEnum phase, bool third, bool replica) {
     _selectedPhase = phase;
     _hasThirdPlace = third;
     _hasReplica = replica;
+
     _initializeDefaultRounds();
     notifyListeners();
   }
 
-  void updateSingleRound(Phases phase, int delta) {
-    final currentCount = _roundsConfig[phase] ?? 1;
-    _roundsConfig[phase] = (currentCount + delta).clamp(1, 5);
+  void updateSingleRound(PhasesEnum phase, int delta) {
+    final current = _roundsConfig[phase] ?? 1;
+    _roundsConfig[phase] = (current + delta).clamp(1, 5);
     notifyListeners();
   }
 
@@ -48,12 +50,21 @@ class TournamentProvider extends ChangeNotifier {
     String name,
     TournamentStorageBase storage,
   ) async {
+    final validPhases = PhaseGeneratorHelper.generate(
+      _selectedPhase,
+      _hasThirdPlace,
+    );
+
+    final filteredRoundsConfig = {
+      for (final phase in validPhases) phase: _roundsConfig[phase] ?? 1,
+    };
+
     final tournament = TournamentModel(
       name: name,
-      startPhase: selectedPhase,
-      hasThirdPlace: hasThirdPlace,
-      hasReplica: hasReplica,
-      roundsConfig: Map.from(_roundsConfig),
+      startPhase: _selectedPhase,
+      hasThirdPlace: _hasThirdPlace,
+      hasReplica: _hasReplica,
+      roundsConfig: filteredRoundsConfig,
     );
 
     await storage.create(tournament);
