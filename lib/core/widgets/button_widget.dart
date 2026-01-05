@@ -6,12 +6,18 @@ class ButtonWidget extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
   final TextStyle? textStyle;
+  final Color? backgroundColor;
+  final Color? overlayColor;
+  final double? height;
 
   const ButtonWidget({
     super.key,
     required this.label,
     required this.onPressed,
     this.textStyle,
+    this.backgroundColor,
+    this.overlayColor,
+    this.height,
   });
 
   @override
@@ -19,7 +25,7 @@ class ButtonWidget extends StatelessWidget {
     return GoldCardDecorator(
       child: SizedBox(
         width: double.infinity,
-        height: context.res.hp(9),
+        height: height ?? context.res.hp(9),
         child: _buildButton(context),
       ),
     );
@@ -28,6 +34,8 @@ class ButtonWidget extends StatelessWidget {
   Widget _buildButton(BuildContext context) => OutlinedButton(
     onPressed: onPressed,
     style: OutlinedButton.styleFrom(
+      backgroundColor: backgroundColor,
+      foregroundColor: overlayColor,
       side: BorderSide.none,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
     ),

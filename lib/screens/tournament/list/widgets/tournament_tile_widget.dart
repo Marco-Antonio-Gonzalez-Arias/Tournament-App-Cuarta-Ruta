@@ -1,14 +1,15 @@
-import 'package:cuarta_ruta_app/core/providers/tournament_list_provider.dart';
-import 'package:cuarta_ruta_app/core/widgets/confirm_modal_widget.dart';
-import 'package:cuarta_ruta_app/models/tournament_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:cuarta_ruta_app/core/config/theme/app_colors.dart';
+import 'package:cuarta_ruta_app/core/providers/tournament_list_provider.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 import 'package:cuarta_ruta_app/core/widgets/tournament_info_row_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/button_widget.dart';
+import 'package:cuarta_ruta_app/core/widgets/confirm_modal_widget.dart';
+import 'package:cuarta_ruta_app/models/tournament_model.dart';
 import 'package:cuarta_ruta_app/models/tournament_base.dart';
 import 'package:cuarta_ruta_app/screens/tournament/list/widgets/tournament_tile_header_widget.dart';
-import 'package:provider/provider.dart';
 
 class TournamentTileWidget extends StatelessWidget {
   final TournamentBase tournament;
@@ -59,7 +60,7 @@ class TournamentTileWidget extends StatelessWidget {
     _buildSectionLabel(context, "Rondas por fase"),
     ..._buildRoundsList(),
     _buildActionRow(context),
-    _buildGoToTournamentButton(),
+    _buildGoToTournamentButton(context),
   ];
 
   Widget _buildActionRow(BuildContext context) => Row(
@@ -116,6 +117,14 @@ class TournamentTileWidget extends StatelessWidget {
       )
       .toList();
 
-  Widget _buildGoToTournamentButton() =>
-      ButtonWidget(label: "Ir al Torneo", onPressed: () {});
+  Widget _buildGoToTournamentButton(BuildContext context) => ButtonWidget(
+    label: "Iniciar",
+    onPressed: () {},
+    height: context.res.hp(5),
+    backgroundColor: AppColors.primaryColor,
+    overlayColor: AppColors.onPrimary.withAlpha(20),
+    textStyle: Theme.of(
+      context,
+    ).textTheme.bodySmall?.copyWith(color: AppColors.onPrimary),
+  );
 }
