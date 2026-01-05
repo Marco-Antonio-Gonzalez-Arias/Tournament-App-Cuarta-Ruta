@@ -1,5 +1,5 @@
 import 'package:cuarta_ruta_app/core/services/app_preferences_base.dart';
-import 'package:cuarta_ruta_app/core/services/app_preferences_service.dart';
+import 'package:cuarta_ruta_app/core/services/impl/app_preferences_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cuarta_ruta_app/core/config/theme/app_theme_config.dart';
 import 'package:cuarta_ruta_app/core/providers/theme_provider.dart';
 import 'package:cuarta_ruta_app/core/services/tournament_storage_base.dart';
-import 'package:cuarta_ruta_app/core/services/tournament_storage_service.dart';
+import 'package:cuarta_ruta_app/core/services/impl/tournament_storage_service.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/widgets/border_decorator_widget.dart';
 import 'package:cuarta_ruta_app/screens/home_screen.dart';

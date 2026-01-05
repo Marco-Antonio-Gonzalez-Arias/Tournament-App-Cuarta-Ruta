@@ -13,7 +13,10 @@ class ResponsiveUtil {
   });
 
   factory ResponsiveUtil.of(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
+    return ResponsiveUtil.fromSize(MediaQuery.sizeOf(context));
+  }
+
+  factory ResponsiveUtil.fromSize(Size size) {
     final diagonal = math.sqrt(
       math.pow(size.width, 2) + math.pow(size.height, 2),
     );

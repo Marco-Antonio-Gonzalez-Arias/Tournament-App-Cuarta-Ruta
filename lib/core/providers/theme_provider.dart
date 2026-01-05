@@ -15,8 +15,12 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   bool isDarkMode(BuildContext context) {
+    return calculateDarkMode(MediaQuery.platformBrightnessOf(context));
+  }
+
+  bool calculateDarkMode(Brightness platformBrightness) {
     if (_themeMode == ThemeModeOption.system) {
-      return MediaQuery.platformBrightnessOf(context) == Brightness.dark;
+      return platformBrightness == Brightness.dark;
     }
     return _themeMode == ThemeModeOption.dark;
   }

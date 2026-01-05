@@ -9,7 +9,7 @@ import 'package:cuarta_ruta_app/core/enums/tournament_sort_option_enum.dart';
 import 'package:cuarta_ruta_app/core/widgets/popup_menu_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/app_bar_widget/app_bar_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/gold_card_decorator.dart';
-import 'package:cuarta_ruta_app/models/tournament_model.dart';
+import 'package:cuarta_ruta_app/models/impl/tournament_model.dart';
 import 'package:cuarta_ruta_app/screens/tournament/list/widgets/tournament_tile_widget.dart';
 import 'package:cuarta_ruta_app/screens/tournament/list/widgets/empty_tournaments_widget.dart';
 

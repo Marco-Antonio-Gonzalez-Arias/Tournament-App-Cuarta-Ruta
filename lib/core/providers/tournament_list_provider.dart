@@ -3,7 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:cuarta_ruta_app/core/services/app_preferences_base.dart';
 import 'package:cuarta_ruta_app/core/services/tournament_storage_base.dart';
 import 'package:cuarta_ruta_app/core/enums/tournament_sort_option_enum.dart';
-import 'package:cuarta_ruta_app/models/tournament_model.dart';
+import 'package:cuarta_ruta_app/models/impl/tournament_model.dart';
 
 class TournamentListProvider extends ChangeNotifier {
   final TournamentStorageBase _storage;

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cuarta_ruta_app/core/services/tournament_storage_base.dart';
-import 'package:cuarta_ruta_app/models/tournament_model.dart';
+import 'package:cuarta_ruta_app/models/impl/tournament_model.dart';
 
 class TournamentStorageService implements TournamentStorageBase {
   final SharedPreferences _prefs;

@@ -7,7 +7,7 @@ import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 import 'package:cuarta_ruta_app/core/widgets/tournament_info_row_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/button_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/confirm_modal_widget.dart';
-import 'package:cuarta_ruta_app/models/tournament_model.dart';
+import 'package:cuarta_ruta_app/models/impl/tournament_model.dart';
 import 'package:cuarta_ruta_app/models/tournament_base.dart';
 import 'package:cuarta_ruta_app/screens/tournament/list/widgets/tournament_tile_header_widget.dart';
 
