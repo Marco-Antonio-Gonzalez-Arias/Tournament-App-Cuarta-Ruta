@@ -2,24 +2,34 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 class ResponsiveUtil {
-  late double _width, _height, _diagonal;
+  final double width;
+  final double height;
+  final double diagonal;
 
-  double get width => _width;
-  double get height => _height;
-  double get diagonal => _diagonal;
+  const ResponsiveUtil._({
+    required this.width,
+    required this.height,
+    required this.diagonal,
+  });
 
-  static ResponsiveUtil of(BuildContext context) {
-    final Size size = MediaQuery.sizeOf(context);
-    return ResponsiveUtil._(size);
+  factory ResponsiveUtil.of(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+    final diagonal = math.sqrt(
+      math.pow(size.width, 2) + math.pow(size.height, 2),
+    );
+
+    return ResponsiveUtil._(
+      width: size.width,
+      height: size.height,
+      diagonal: diagonal,
+    );
   }
 
-  ResponsiveUtil._(Size size) {
-    _width = size.width;
-    _height = size.height;
-    _diagonal = math.sqrt(math.pow(_width, 2) + math.pow(_height, 2));
-  }
+  double wp(double percentage) => width * (percentage / 100);
+  double hp(double percentage) => height * (percentage / 100);
+  double dp(double percentage) => diagonal * (percentage / 100);
+}
 
-  double wp(double percentage) => _width * (percentage / 100);
-  double hp(double percentage) => _height * (percentage / 100);
-  double dp(double percentage) => _diagonal * (percentage / 100);
+extension ResponsiveContext on BuildContext {
+  ResponsiveUtil get res => ResponsiveUtil.of(this);
 }

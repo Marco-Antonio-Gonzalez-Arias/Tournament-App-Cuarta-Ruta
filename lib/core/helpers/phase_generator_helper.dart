@@ -1,15 +1,17 @@
-import 'package:cuarta_ruta_app/models/tournament_model.dart';
+import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 
 class PhaseGeneratorHelper {
-  static List<Phases> generate(Phases startPhase, bool hasThirdPlace) {
-    final phases = <Phases>[];
+  static List<PhasesEnum> generate(PhasesEnum startPhase, bool hasThirdPlace) {
+    final phases = PhasesEnum.values.where((p) {
+      if (p == PhasesEnum.tercerPuesto || p == PhasesEnum.faseFinal) return false;
+      return p.index <= startPhase.index;
+    }).toList();
 
-    if (startPhase.index >= Phases.octavos.index) phases.add(Phases.octavos);
-    if (startPhase.index >= Phases.cuartos.index) phases.add(Phases.cuartos);
-    phases.add(Phases.semifinales);
-    if (hasThirdPlace) phases.add(Phases.tercerPuesto);
-    phases.add(Phases.faseFinal);
+    final sortedPhases = phases.reversed.toList();
 
-    return phases;
+    if (hasThirdPlace) sortedPhases.add(PhasesEnum.tercerPuesto);
+    sortedPhases.add(PhasesEnum.faseFinal);
+
+    return sortedPhases;
   }
 }

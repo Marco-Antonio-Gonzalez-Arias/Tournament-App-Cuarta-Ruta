@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
 
 class LogoImageWidget extends StatelessWidget {
-  final double _height;
+  final double height;
+  final String lightAsset;
+  final String darkAsset;
 
-  const LogoImageWidget({super.key, required double height}) : _height = height;
+  const LogoImageWidget({
+    super.key,
+    required this.height,
+    required this.lightAsset,
+    required this.darkAsset,
+  });
 
   @override
   Widget build(BuildContext context) {
+    return Image.asset(
+      _resolveAssetPath(context),
+      height: height,
+      fit: BoxFit.contain,
+    );
+  }
+
+  String _resolveAssetPath(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
-    final assetPath = isDarkMode
-        ? 'assets/icon/icon_light.png'
-        : 'assets/icon/icon_black.png';
-
-    return Image.asset(assetPath, height: _height, fit: BoxFit.contain);
+    return isDarkMode ? lightAsset : darkAsset;
   }
 }

@@ -1,31 +1,21 @@
 import 'package:uuid/uuid.dart';
+import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
+import 'package:cuarta_ruta_app/models/tournament_base.dart';
 
-enum Phases { faseFinal, tercerPuesto, semifinales, cuartos, octavos }
-
-extension PhaseDisplay on Phases {
-  String get displayName {
-    switch (this) {
-      case Phases.octavos:
-        return 'Octavos';
-      case Phases.cuartos:
-        return 'Cuartos';
-      case Phases.semifinales:
-        return 'Semifinales';
-      case Phases.tercerPuesto:
-        return 'Tercer Puesto';
-      case Phases.faseFinal:
-        return 'Final';
-    }
-  }
-}
-
-class TournamentModel {
+class TournamentModel implements TournamentBase {
   final String id;
+  final DateTime createdAt;
+
+  @override
   final String name;
-  final Phases startPhase;
+  @override
+  final PhasesEnum startPhase;
+  @override
   final bool hasThirdPlace;
+  @override
   final bool hasReplica;
-  final Map<Phases, int> roundsConfig;
+  @override
+  final Map<PhasesEnum, int> roundsConfig;
 
   TournamentModel({
     required this.name,
@@ -33,7 +23,8 @@ class TournamentModel {
     required this.hasThirdPlace,
     required this.hasReplica,
     required this.roundsConfig,
-  }) : id = const Uuid().v4();
+  }) : id = const Uuid().v4(),
+       createdAt = DateTime.now();
 
   TournamentModel._internal({
     required this.id,
@@ -42,17 +33,19 @@ class TournamentModel {
     required this.hasThirdPlace,
     required this.hasReplica,
     required this.roundsConfig,
+    required this.createdAt,
   });
 
   TournamentModel copyWith({
     String? name,
-    Phases? startPhase,
+    PhasesEnum? startPhase,
     bool? hasThirdPlace,
     bool? hasReplica,
-    Map<Phases, int>? roundsConfig,
+    Map<PhasesEnum, int>? roundsConfig,
   }) {
     return TournamentModel._internal(
       id: id,
+      createdAt: createdAt,
       name: name ?? this.name,
       startPhase: startPhase ?? this.startPhase,
       hasThirdPlace: hasThirdPlace ?? this.hasThirdPlace,
@@ -61,26 +54,28 @@ class TournamentModel {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'startPhase': startPhase.name,
-      'hasThirdPlace': hasThirdPlace,
-      'hasReplica': hasReplica,
-      'roundsConfig': roundsConfig.map((k, v) => MapEntry(k.name, v)),
-    };
-  }
-
   factory TournamentModel.fromJson(Map<String, dynamic> json) {
-    final config = (json['roundsConfig'] as Map).cast<String, int>();
+    final config = Map<String, int>.from(json['roundsConfig']);
     return TournamentModel._internal(
       id: json['id'],
       name: json['name'],
-      startPhase: Phases.values.byName(json['startPhase']),
+      startPhase: PhasesEnum.values.byName(json['startPhase']),
       hasThirdPlace: json['hasThirdPlace'],
       hasReplica: json['hasReplica'],
-      roundsConfig: config.map((k, v) => MapEntry(Phases.values.byName(k), v)),
+      roundsConfig: config.map((k, v) => MapEntry(PhasesEnum.values.byName(k), v)),
+      createdAt: DateTime.parse(
+        json['createdAt'] ?? DateTime.now().toIso8601String(),
+      ),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'startPhase': startPhase.name,
+    'hasThirdPlace': hasThirdPlace,
+    'hasReplica': hasReplica,
+    'roundsConfig': roundsConfig.map((k, v) => MapEntry(k.name, v)),
+    'createdAt': createdAt.toIso8601String(),
+  };
 }

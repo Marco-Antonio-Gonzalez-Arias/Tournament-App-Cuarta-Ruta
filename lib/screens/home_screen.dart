@@ -1,6 +1,7 @@
-import 'package:cuarta_ruta_app/core/widgets/app_bar/app_bar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:cuarta_ruta_app/core/config/dimensions/app_dimensions.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
+import 'package:cuarta_ruta_app/core/widgets/app_bar_widget/app_bar_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/button_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/logo_image_widget.dart';
 import 'package:cuarta_ruta_app/screens/tournament/tournament_menu_screen.dart';
@@ -10,34 +11,48 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final responsive = ResponsiveUtil.of(context);
-
     return Scaffold(
-      appBar: const AppBarWidget(title: "Inicio"),
-      body: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: responsive.wp(20)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildLogo(responsive),
-            SizedBox(height: responsive.hp(10)),
-            ButtonWidget(label: 'Torneo', onPressed: () => _toTournament(context)),
-            SizedBox(height: responsive.hp(3)),
-            ButtonWidget(label: 'Libre', onPressed: () {}),
-            SizedBox(height: responsive.hp(3)),
-            ButtonWidget(label: 'Visuales', onPressed: () {}),
-          ],
-        ),
+      appBar: AppBarWidget(
+        title: "Inicio",
+        height: AppDimensions.appBarHeight(context.res),
+      ),
+      body: _buildBody(context),
+    );
+  }
+
+  Widget _buildBody(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: context.res.wp(20)),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: _buildMenuContent(context),
       ),
     );
   }
 
-  Widget _buildLogo(ResponsiveUtil responsive) {
-    return LogoImageWidget(height: responsive.hp(15));
+  List<Widget> _buildMenuContent(BuildContext context) {
+    return [
+      _buildLogo(context),
+      SizedBox(height: context.res.hp(10)),
+      ButtonWidget(
+        label: 'Torneo',
+        onPressed: () => _navigateToTournament(context),
+      ),
+      SizedBox(height: context.res.hp(3)),
+      ButtonWidget(label: 'Libre', onPressed: () {}),
+      SizedBox(height: context.res.hp(3)),
+      ButtonWidget(label: 'Visuales', onPressed: () {}),
+    ];
   }
 
-  void _toTournament(BuildContext context) {
+  Widget _buildLogo(BuildContext context) => LogoImageWidget(
+    height: context.res.hp(15),
+    lightAsset: 'assets/icon/icon_light.png',
+    darkAsset: 'assets/icon/icon_black.png',
+  );
+
+  void _navigateToTournament(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const TournamentMenuScreen()),

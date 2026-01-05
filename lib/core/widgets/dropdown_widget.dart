@@ -1,6 +1,8 @@
+import 'package:cuarta_ruta_app/core/utils/theme_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/config/theme/app_colors.dart';
+import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
+import 'package:cuarta_ruta_app/core/widgets/gold_card_decorator.dart';
 
 class DropdownWidget<T> extends StatelessWidget {
   final T value;
@@ -22,64 +24,54 @@ class DropdownWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final res = ResponsiveUtil.of(context);
-    final theme = Theme.of(context);
-
-    return Container(
-      height: res.hp(8),
-      decoration: _buildDecoration(res),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<T>(
-          value: value,
-          isExpanded: true,
-          dropdownColor: theme.scaffoldBackgroundColor,
-          icon: _buildIcon(res),
-          selectedItemBuilder: (context) => _buildSelectedItems(theme),
-          items: _buildMenuItems(theme),
-          onChanged: onChanged,
+    return GoldCardDecorator(
+      child: SizedBox(
+        height: context.res.hp(8),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<T>(
+            value: value,
+            isExpanded: true,
+            dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+            icon: _buildGoldenIcon(context),
+            selectedItemBuilder: (context) => _buildSelectedItems(context),
+            items: _buildMenuItems(context),
+            onChanged: onChanged,
+          ),
         ),
       ),
     );
   }
 
-  BoxDecoration _buildDecoration(ResponsiveUtil res) {
-    return BoxDecoration(
-      border: Border.all(color: AppColors.primaryGold, width: res.dp(0.5)),
-      borderRadius: BorderRadius.circular(res.dp(1)),
-    );
-  }
-
-  Widget _buildIcon(ResponsiveUtil res) {
+  Widget _buildGoldenIcon(BuildContext context) {
     return Container(
-      width: res.wp(20),
-      height: res.hp(8),
-      color: AppColors.primaryGold,
+      width: context.res.wp(20),
+      height: double.infinity,
+      color: AppColors.primaryColor,
       child: Icon(
         Icons.arrow_drop_down,
-        size: res.dp(5),
-        color: AppColors.backgroundBlack,
+        size: context.res.dp(5),
+        color: AppColors.getTextColor(context.isDark),
       ),
     );
   }
 
-  List<Widget> _buildSelectedItems(ThemeData theme) {
-    final style = textStyle ??
-        theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface);
+  List<Widget> _buildSelectedItems(BuildContext context) => items
+      .map(
+        (_) => Center(
+          child: Text(label, style: textStyle ?? _defaultStyle(context)),
+        ),
+      )
+      .toList();
 
-    return items
-        .map((_) => Center(child: Text(label, style: style)))
-        .toList();
-  }
+  List<DropdownMenuItem<T>> _buildMenuItems(BuildContext context) => items
+      .map(
+        (item) => DropdownMenuItem<T>(
+          value: item,
+          child: Text(itemLabelBuilder(item), style: _defaultStyle(context)),
+        ),
+      )
+      .toList();
 
-  List<DropdownMenuItem<T>> _buildMenuItems(ThemeData theme) {
-    final style = textStyle ??
-        theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface);
-
-    return items.map((item) {
-      return DropdownMenuItem<T>(
-        value: item,
-        child: Text(itemLabelBuilder(item), style: style),
-      );
-    }).toList();
-  }
+  TextStyle? _defaultStyle(BuildContext context) =>
+      Theme.of(context).textTheme.bodySmall;
 }

@@ -11,13 +11,9 @@ class AppThemeConfig {
       _responsive = responsive;
 
   ThemeData theme() {
-    final brightness = _isDarkMode ? Brightness.dark : Brightness.light;
-    final textColor = _isDarkMode
-        ? AppColors.primaryWhite
-        : AppColors.backgroundBlack;
-    final backgroundColor = _isDarkMode
-        ? AppColors.backgroundBlack
-        : AppColors.primaryWhite;
+    final brightness = AppColors.getBrightness(_isDarkMode);
+    final textColor = AppColors.getTextColor(_isDarkMode);
+    final backgroundColor = AppColors.getBackgroundColor(_isDarkMode);
 
     return ThemeData(
       useMaterial3: true,
@@ -25,7 +21,7 @@ class AppThemeConfig {
       fontFamily: 'Bangers',
       scaffoldBackgroundColor: backgroundColor,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primaryGold,
+        seedColor: AppColors.primaryColor,
         brightness: brightness,
       ),
       textTheme: _buildTextTheme(textColor),
@@ -34,28 +30,33 @@ class AppThemeConfig {
         foregroundColor: textColor,
         elevation: 0,
       ),
-      splashColor: AppColors.primaryGold.withAlpha(12),
-      highlightColor: AppColors.primaryGold.withAlpha(10),
+      splashColor: AppColors.primaryColor.withAlpha(12),
+      highlightColor: AppColors.primaryColor.withAlpha(10),
+      dividerColor: AppColors.primaryColor,
+      dividerTheme: DividerThemeData(color: AppColors.primaryColor),
     );
   }
 
   TextTheme _buildTextTheme(Color color) {
+    TextStyle style(double size) =>
+        TextStyle(color: color, fontSize: _responsive.dp(size));
+
     return TextTheme(
-      displayLarge: TextStyle(color: color, fontSize: _responsive.dp(8.5)),
-      displayMedium: TextStyle(color: color, fontSize: _responsive.dp(8)),
-      displaySmall: TextStyle(color: color, fontSize: _responsive.dp(7.5)),
-      headlineLarge: TextStyle(color: color, fontSize: _responsive.dp(7)),
-      headlineMedium: TextStyle(color: color, fontSize: _responsive.dp(6.5)),
-      headlineSmall: TextStyle(color: color, fontSize: _responsive.dp(6)),
-      titleLarge: TextStyle(color: color, fontSize: _responsive.dp(5.5)),
-      titleMedium: TextStyle(color: color, fontSize: _responsive.dp(5)),
-      titleSmall: TextStyle(color: color, fontSize: _responsive.dp(4.5)),
-      bodyLarge: TextStyle(color: color, fontSize: _responsive.dp(4)),
-      bodyMedium: TextStyle(color: color, fontSize: _responsive.dp(3.5)),
-      bodySmall: TextStyle(color: color, fontSize: _responsive.dp(3)),
-      labelLarge: TextStyle(color: color, fontSize: _responsive.dp(2.5)),
-      labelMedium: TextStyle(color: color, fontSize: _responsive.dp(2)),
-      labelSmall: TextStyle(color: color, fontSize: _responsive.dp(1.5)),
+      displayLarge: style(8.5),
+      displayMedium: style(8),
+      displaySmall: style(7.5),
+      headlineLarge: style(7),
+      headlineMedium: style(6.5),
+      headlineSmall: style(6),
+      titleLarge: style(5.5),
+      titleMedium: style(5),
+      titleSmall: style(4.5),
+      bodyLarge: style(4),
+      bodyMedium: style(3.5),
+      bodySmall: style(3),
+      labelLarge: style(2.5),
+      labelMedium: style(2),
+      labelSmall: style(1.5),
     );
   }
 }
