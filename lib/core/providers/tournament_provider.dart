@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 import 'package:cuarta_ruta_app/core/helpers/phase_generator_helper.dart';
 import 'package:cuarta_ruta_app/core/services/tournament_storage_base.dart';
-import 'package:cuarta_ruta_app/models/tournament_model.dart';
+import 'package:cuarta_ruta_app/models/impl/tournament_model.dart';
 
 class TournamentProvider extends ChangeNotifier {
   PhasesEnum _selectedPhase = PhasesEnum.octavos;
@@ -58,7 +58,6 @@ class TournamentProvider extends ChangeNotifier {
     final filteredRoundsConfig = {
       for (final phase in validPhases) phase: _roundsConfig[phase] ?? 1,
     };
-
     final tournament = TournamentModel(
       name: name,
       startPhase: _selectedPhase,

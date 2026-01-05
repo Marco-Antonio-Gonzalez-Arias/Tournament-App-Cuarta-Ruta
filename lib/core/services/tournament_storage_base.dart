@@ -1,4 +1,4 @@
-import 'package:cuarta_ruta_app/models/tournament_model.dart';
+import 'package:cuarta_ruta_app/models/impl/tournament_model.dart';
 
 abstract class TournamentStorageBase {
   Future<void> create(TournamentModel tournament);
