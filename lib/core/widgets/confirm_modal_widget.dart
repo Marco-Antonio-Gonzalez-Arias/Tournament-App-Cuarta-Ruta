@@ -5,12 +5,14 @@ class ConfirmModalWidget extends StatelessWidget {
   final String title;
   final String message;
   final String confirmLabel;
+  final String dismissLabel;
 
   const ConfirmModalWidget({
     super.key,
     required this.title,
     required this.message,
-    this.confirmLabel = 'Eliminar',
+    this.confirmLabel = 'Confirmar',
+    this.dismissLabel = 'Cancelar',
   });
 
   @override
@@ -30,7 +32,7 @@ class ConfirmModalWidget extends StatelessWidget {
   List<Widget> _buildActions(BuildContext context, ThemeData theme) => [
     TextButton(
       onPressed: () => Navigator.pop(context, false),
-      child: Text('Cancelar', style: theme.textTheme.bodySmall),
+      child: Text(dismissLabel, style: theme.textTheme.bodySmall),
     ),
     TextButton(
       onPressed: () => Navigator.pop(context, true),

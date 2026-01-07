@@ -1,3 +1,4 @@
+import 'package:cuarta_ruta_app/core/config/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cuarta_ruta_app/core/providers/tournament_provider.dart';
@@ -53,9 +54,14 @@ class StickyCreateButtonWidget extends StatelessWidget {
   ) async {
     final storage = context.read<TournamentStorageBase>();
     await provider.createTournament(name, storage);
-    if (context.mounted) _navigateToHome(context);
+    if (context.mounted) _navigateToList(context);
   }
 
-  void _navigateToHome(BuildContext context) =>
-      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+  void _navigateToList(BuildContext context) {
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      AppRoutes.tournamentList,
+      ModalRoute.withName(AppRoutes.tournamentMenu),
+    );
+  }
 }
