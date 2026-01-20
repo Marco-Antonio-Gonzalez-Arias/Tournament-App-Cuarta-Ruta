@@ -1,8 +1,8 @@
-import 'package:cuarta_ruta_app/models/impl/tournament_model.dart';
+import 'package:cuarta_ruta_app/models/tournament_base.dart';
 
 abstract class TournamentStorageBase {
-  Future<void> create(TournamentModel tournament);
-  Future<void> update(TournamentModel tournament);
-  Future<List<TournamentModel>> getAll();
+  Future<void> create(TournamentBase tournament);
+  Future<void> update(TournamentBase tournament);
+  Future<List<TournamentBase>> getAll();
   Future<void> delete(String id);
 }
