@@ -1,0 +1,1 @@
+enum TournamentTypeEnum { knockout, league }
