@@ -4,7 +4,7 @@ import 'package:cuarta_ruta_app/core/enums/tournament_type_enum.dart';
 import 'package:cuarta_ruta_app/models/tournament_progress_base.dart';
 import 'package:cuarta_ruta_app/models/impl/match_model.dart';
 
-class ActiveKnockoutModel implements TournamentProgressBase {
+class KnockoutProgressModel implements TournamentProgressBase {
   @override
   final String id;
   @override
@@ -17,7 +17,7 @@ class ActiveKnockoutModel implements TournamentProgressBase {
   final Set<String> participantIds;
   final Map<PhasesEnum, List<MatchModel>> matchesByPhase;
 
-  ActiveKnockoutModel({
+  KnockoutProgressModel({
     String? id,
     required this.tournamentId,
     this.isCompleted = false,
@@ -25,12 +25,12 @@ class ActiveKnockoutModel implements TournamentProgressBase {
     required this.matchesByPhase,
   }) : id = id ?? const Uuid().v4();
 
-  ActiveKnockoutModel copyWith({
+  KnockoutProgressModel copyWith({
     bool? isCompleted,
     Set<String>? participantIds,
     Map<PhasesEnum, List<MatchModel>>? matchesByPhase,
   }) {
-    return ActiveKnockoutModel(
+    return KnockoutProgressModel(
       id: id,
       tournamentId: tournamentId,
       isCompleted: isCompleted ?? this.isCompleted,
@@ -39,9 +39,9 @@ class ActiveKnockoutModel implements TournamentProgressBase {
     );
   }
 
-  factory ActiveKnockoutModel.fromJson(Map<String, dynamic> json) {
+  factory KnockoutProgressModel.fromJson(Map<String, dynamic> json) {
     final Map<String, dynamic> matchesRaw = json['matchesByPhase'];
-    return ActiveKnockoutModel(
+    return KnockoutProgressModel(
       id: json['id'],
       tournamentId: json['tournamentId'],
       isCompleted: json['isCompleted'] ?? false,
