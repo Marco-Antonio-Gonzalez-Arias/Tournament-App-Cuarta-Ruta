@@ -1,7 +1,7 @@
 import 'package:uuid/uuid.dart';
 import 'package:cuarta_ruta_app/models/participant_base.dart';
 
-class ParticipantModel implements ParticipantBase {
+class LeagueParticipantModel implements ParticipantBase {
   @override
   final String id;
   @override
@@ -14,7 +14,7 @@ class ParticipantModel implements ParticipantBase {
   final int directLosses;
   final int replicaLosses;
 
-  ParticipantModel({
+  LeagueParticipantModel({
     String? id,
     required this.name,
     this.totalPoints = 0,
@@ -25,7 +25,7 @@ class ParticipantModel implements ParticipantBase {
     this.replicaLosses = 0,
   }) : id = id ?? const Uuid().v4();
 
-  ParticipantModel copyWith({
+  LeagueParticipantModel copyWith({
     String? name,
     int? totalPoints,
     int? ptb,
@@ -34,7 +34,7 @@ class ParticipantModel implements ParticipantBase {
     int? directLosses,
     int? replicaLosses,
   }) {
-    return ParticipantModel(
+    return LeagueParticipantModel(
       id: id,
       name: name ?? this.name,
       totalPoints: totalPoints ?? this.totalPoints,
@@ -46,8 +46,8 @@ class ParticipantModel implements ParticipantBase {
     );
   }
 
-  factory ParticipantModel.fromJson(Map<String, dynamic> json) =>
-      ParticipantModel(
+  factory LeagueParticipantModel.fromJson(Map<String, dynamic> json) =>
+      LeagueParticipantModel(
         id: json['id'],
         name: json['name'],
         totalPoints: json['totalPoints'] ?? 0,

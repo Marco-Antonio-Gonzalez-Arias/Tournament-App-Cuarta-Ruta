@@ -2,7 +2,7 @@ import 'package:uuid/uuid.dart';
 import 'package:cuarta_ruta_app/core/enums/tournament_type_enum.dart';
 import 'package:cuarta_ruta_app/models/tournament_progress_base.dart';
 import 'package:cuarta_ruta_app/models/impl/match_model.dart';
-import 'package:cuarta_ruta_app/models/impl/participant_model.dart';
+import 'package:cuarta_ruta_app/models/impl/league_participant_model.dart';
 
 class LeagueProgressModel implements TournamentProgressBase {
   @override
@@ -14,7 +14,7 @@ class LeagueProgressModel implements TournamentProgressBase {
   @override
   final bool isCompleted;
 
-  final List<ParticipantModel> participants;
+  final List<LeagueParticipantModel> participants;
   final Map<int, List<MatchModel>> matchesByJourney;
 
   LeagueProgressModel({
@@ -27,7 +27,7 @@ class LeagueProgressModel implements TournamentProgressBase {
 
   LeagueProgressModel copyWith({
     bool? isCompleted,
-    List<ParticipantModel>? participants,
+    List<LeagueParticipantModel>? participants,
     Map<int, List<MatchModel>>? matchesByJourney,
   }) {
     return LeagueProgressModel(
@@ -46,7 +46,9 @@ class LeagueProgressModel implements TournamentProgressBase {
       tournamentId: json['tournamentId'],
       isCompleted: json['isCompleted'] ?? false,
       participants: (json['participants'] as List)
-          .map((p) => ParticipantModel.fromJson(p as Map<String, dynamic>))
+          .map(
+            (p) => LeagueParticipantModel.fromJson(p as Map<String, dynamic>),
+          )
           .toList(),
       matchesByJourney: journeysRaw.map(
         (k, v) => MapEntry(
