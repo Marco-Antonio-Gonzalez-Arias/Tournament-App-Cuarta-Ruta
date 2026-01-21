@@ -1,10 +1,10 @@
 import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cuarta_ruta_app/core/enums/tournament_type_enum.dart';
-import 'package:cuarta_ruta_app/models/tournament_session_base.dart';
+import 'package:cuarta_ruta_app/models/tournament_progress_base.dart';
 import 'package:cuarta_ruta_app/models/impl/match_model.dart';
 
-class KnockoutSessionModel implements TournamentSessionBase {
+class ActiveKnockoutModel implements TournamentProgressBase {
   @override
   final String id;
   @override
@@ -17,7 +17,7 @@ class KnockoutSessionModel implements TournamentSessionBase {
   final Set<String> participantIds;
   final Map<PhasesEnum, List<MatchModel>> matchesByPhase;
 
-  KnockoutSessionModel({
+  ActiveKnockoutModel({
     String? id,
     required this.tournamentId,
     this.isCompleted = false,
@@ -25,12 +25,12 @@ class KnockoutSessionModel implements TournamentSessionBase {
     required this.matchesByPhase,
   }) : id = id ?? const Uuid().v4();
 
-  KnockoutSessionModel copyWith({
+  ActiveKnockoutModel copyWith({
     bool? isCompleted,
     Set<String>? participantIds,
     Map<PhasesEnum, List<MatchModel>>? matchesByPhase,
   }) {
-    return KnockoutSessionModel(
+    return ActiveKnockoutModel(
       id: id,
       tournamentId: tournamentId,
       isCompleted: isCompleted ?? this.isCompleted,
@@ -39,9 +39,9 @@ class KnockoutSessionModel implements TournamentSessionBase {
     );
   }
 
-  factory KnockoutSessionModel.fromJson(Map<String, dynamic> json) {
+  factory ActiveKnockoutModel.fromJson(Map<String, dynamic> json) {
     final Map<String, dynamic> matchesRaw = json['matchesByPhase'];
-    return KnockoutSessionModel(
+    return ActiveKnockoutModel(
       id: json['id'],
       tournamentId: json['tournamentId'],
       isCompleted: json['isCompleted'] ?? false,

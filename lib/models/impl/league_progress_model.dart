@@ -1,10 +1,10 @@
 import 'package:uuid/uuid.dart';
 import 'package:cuarta_ruta_app/core/enums/tournament_type_enum.dart';
-import 'package:cuarta_ruta_app/models/tournament_session_base.dart';
+import 'package:cuarta_ruta_app/models/tournament_progress_base.dart';
 import 'package:cuarta_ruta_app/models/impl/match_model.dart';
 import 'package:cuarta_ruta_app/models/impl/participant_model.dart';
 
-class LeagueSessionModel implements TournamentSessionBase {
+class LeagueProgressModel implements TournamentProgressBase {
   @override
   final String id;
   @override
@@ -17,7 +17,7 @@ class LeagueSessionModel implements TournamentSessionBase {
   final List<ParticipantModel> participants;
   final Map<int, List<MatchModel>> matchesByJourney;
 
-  LeagueSessionModel({
+  LeagueProgressModel({
     String? id,
     required this.tournamentId,
     this.isCompleted = false,
@@ -25,12 +25,12 @@ class LeagueSessionModel implements TournamentSessionBase {
     required this.matchesByJourney,
   }) : id = id ?? const Uuid().v4();
 
-  LeagueSessionModel copyWith({
+  LeagueProgressModel copyWith({
     bool? isCompleted,
     List<ParticipantModel>? participants,
     Map<int, List<MatchModel>>? matchesByJourney,
   }) {
-    return LeagueSessionModel(
+    return LeagueProgressModel(
       id: id,
       tournamentId: tournamentId,
       isCompleted: isCompleted ?? this.isCompleted,
@@ -39,9 +39,9 @@ class LeagueSessionModel implements TournamentSessionBase {
     );
   }
 
-  factory LeagueSessionModel.fromJson(Map<String, dynamic> json) {
+  factory LeagueProgressModel.fromJson(Map<String, dynamic> json) {
     final journeysRaw = Map<String, dynamic>.from(json['matchesByJourney']);
-    return LeagueSessionModel(
+    return LeagueProgressModel(
       id: json['id'],
       tournamentId: json['tournamentId'],
       isCompleted: json['isCompleted'] ?? false,
