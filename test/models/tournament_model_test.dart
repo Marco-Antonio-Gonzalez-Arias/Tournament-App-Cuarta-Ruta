@@ -5,14 +5,14 @@ import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 void main() {
   group('TournamentModel Tests', () {
     final Map<PhasesEnum, int> mockConfig = {
-      PhasesEnum.cuartos: 4,
-      PhasesEnum.semifinales: 2,
+      PhasesEnum.quarterFinals: 4,
+      PhasesEnum.semifinals: 2,
     };
 
     test('Constructor should initialize with UUID and current Date', () {
       final model = TournamentModel(
         name: 'Copa Pistón',
-        startPhase: PhasesEnum.cuartos,
+        startPhase: PhasesEnum.quarterFinals,
         hasThirdPlace: true,
         hasReplica: false,
         roundsConfig: mockConfig,
@@ -21,7 +21,7 @@ void main() {
       expect(model.id, isNotEmpty);
       expect(model.name, 'Copa Pistón');
       expect(model.createdAt, isA<DateTime>());
-      expect(model.startPhase, PhasesEnum.cuartos);
+      expect(model.startPhase, PhasesEnum.quarterFinals);
     });
 
     test('fromJson should create a valid model with correct Enums', () {
@@ -38,18 +38,18 @@ void main() {
       final model = TournamentModel.fromJson(json);
 
       expect(model.id, 'uuid-123');
-      expect(model.startPhase, PhasesEnum.cuartos);
-      expect(model.roundsConfig.containsKey(PhasesEnum.semifinales), true);
-      expect(model.roundsConfig[PhasesEnum.cuartos], 4);
+      expect(model.startPhase, PhasesEnum.quarterFinals);
+      expect(model.roundsConfig.containsKey(PhasesEnum.semifinals), true);
+      expect(model.roundsConfig[PhasesEnum.quarterFinals], 4);
     });
 
     test('toJson should return strings matching Enum names', () {
       final model = TournamentModel(
         name: 'Master Cup',
-        startPhase: PhasesEnum.faseFinal,
+        startPhase: PhasesEnum.finalPhase,
         hasThirdPlace: false,
         hasReplica: true,
-        roundsConfig: {PhasesEnum.faseFinal: 1},
+        roundsConfig: {PhasesEnum.finalPhase: 1},
       );
 
       final json = model.toJson();
@@ -62,7 +62,7 @@ void main() {
     test('copyWith should maintain immutability of non-specified fields', () {
       final model = TournamentModel(
         name: 'Original',
-        startPhase: PhasesEnum.octavos,
+        startPhase: PhasesEnum.roundOf16,
         hasThirdPlace: false,
         hasReplica: false,
         roundsConfig: {},
@@ -72,7 +72,7 @@ void main() {
 
       expect(updated.name, 'Nuevo Nombre');
       expect(updated.id, model.id);
-      expect(updated.startPhase, PhasesEnum.octavos);
+      expect(updated.startPhase, PhasesEnum.roundOf16);
       expect(updated.createdAt, model.createdAt);
     });
   });

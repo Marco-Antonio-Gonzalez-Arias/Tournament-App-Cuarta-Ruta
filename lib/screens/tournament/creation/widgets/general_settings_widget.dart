@@ -43,7 +43,7 @@ class GeneralSettingsWidget extends StatelessWidget {
     return DropdownWidget<PhasesEnum>(
       label: 'Fase Inicial',
       value: provider.selectedPhase,
-      items: const [PhasesEnum.octavos, PhasesEnum.cuartos, PhasesEnum.semifinales],
+      items: const [PhasesEnum.roundOf16, PhasesEnum.quarterFinals, PhasesEnum.semifinals],
       itemLabelBuilder: (phase) => phase.displayName,
       onChanged: (val) => _updatePhase(provider, val),
       textStyle: Theme.of(context).textTheme.labelLarge,
