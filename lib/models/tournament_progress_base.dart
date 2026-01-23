@@ -1,9 +1,8 @@
 import 'package:cuarta_ruta_app/core/enums/tournament_type_enum.dart';
 
-abstract class TournamentBase {
+abstract class TournamentProgressBase {
   String get id;
-  String get name;
+  String get tournamentId;
   TournamentTypeEnum get type;
-  int get pointsDifference;
-  int get replicaCount;
+  bool get isCompleted;
 }

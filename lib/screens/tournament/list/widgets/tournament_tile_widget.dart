@@ -87,9 +87,10 @@ class TournamentTileWidget extends StatelessWidget {
 
   Future<bool?> _showConfirmDialog(BuildContext context) => showDialog<bool>(
     context: context,
-    builder: (context) => const ConfirmModalWidget(
+    builder: (context) => ConfirmModalWidget(
       title: "Confirmar",
-      message: "¿Deseas eliminar este torneo de tu lista?",
+      message: "¿Deseas eliminar \"${tournament.name}\" de tu lista?",
+      confirmLabel: "Eliminar",
     ),
   );
 

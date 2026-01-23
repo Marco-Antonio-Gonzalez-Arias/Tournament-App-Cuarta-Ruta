@@ -34,7 +34,7 @@ class MenuOptionWidget extends StatelessWidget {
       child: IgnorePointer(
         child: BorderedTextWidget(
           text: label,
-          style: Theme.of(context).textTheme.displayLarge,
+          style: Theme.of(context).textTheme.displaySmall,
           strokeWidth: context.res.dp(2),
           strokeColor: AppColors.onPrimary,
           fillColor: AppColors.primaryColor,

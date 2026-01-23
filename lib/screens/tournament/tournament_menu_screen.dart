@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:cuarta_ruta_app/core/config/routes/app_routes.dart';
 import 'package:cuarta_ruta_app/core/config/dimensions/app_dimensions.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/widgets/app_bar_widget/app_bar_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/menu_option_widget.dart';
-import 'package:cuarta_ruta_app/screens/tournament/list/tournament_list_screen.dart';
-import 'package:cuarta_ruta_app/screens/tournament/creation/tournament_creation_screen.dart';
 
 class TournamentMenuScreen extends StatelessWidget {
   const TournamentMenuScreen({super.key});
@@ -27,13 +26,13 @@ class TournamentMenuScreen extends StatelessWidget {
           context,
           image: 'assets/images/guardados.png',
           label: 'Guardados',
-          screen: const TournamentListScreen(),
+          routeName: AppRoutes.tournamentList,
         ),
         _buildOption(
           context,
           image: 'assets/images/crear.png',
           label: 'Crear',
-          screen: const TournamentCreationScreen(),
+          routeName: AppRoutes.tournamentCreation,
         ),
         _buildScanOption(context),
       ],
@@ -44,12 +43,12 @@ class TournamentMenuScreen extends StatelessWidget {
     BuildContext context, {
     required String image,
     required String label,
-    required Widget screen,
+    required String routeName,
   }) => Expanded(
     child: MenuOptionWidget(
       imagePath: image,
       label: label,
-      onTap: () => _navigateTo(context, screen),
+      onTap: () => _navigateTo(context, routeName),
     ),
   );
 
@@ -61,7 +60,7 @@ class TournamentMenuScreen extends StatelessWidget {
     ),
   );
 
-  void _navigateTo(BuildContext context, Widget screen) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
+  void _navigateTo(BuildContext context, String routeName) {
+    Navigator.pushNamed(context, routeName);
   }
 }

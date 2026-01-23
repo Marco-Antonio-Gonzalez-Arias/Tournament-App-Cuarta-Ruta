@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/config/dimensions/app_dimensions.dart';
+import 'package:cuarta_ruta_app/core/config/routes/app_routes.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/widgets/app_bar_widget/app_bar_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/button_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/logo_image_widget.dart';
-import 'package:cuarta_ruta_app/screens/tournament/tournament_menu_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -53,9 +53,6 @@ class HomeScreen extends StatelessWidget {
   );
 
   void _navigateToTournament(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const TournamentMenuScreen()),
-    );
+    Navigator.pushNamed(context, AppRoutes.tournamentMenu);
   }
 }
