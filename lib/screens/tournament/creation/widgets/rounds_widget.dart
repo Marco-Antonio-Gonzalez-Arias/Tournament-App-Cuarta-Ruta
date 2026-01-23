@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cuarta_ruta_app/core/providers/tournament_provider.dart';
-import 'package:cuarta_ruta_app/core/helpers/phase_generator_helper.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 import 'package:cuarta_ruta_app/core/widgets/counter_selector_widget.dart';
@@ -12,10 +11,7 @@ class RoundsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<TournamentProvider>();
-    final phases = PhaseGeneratorHelper.generate(
-      provider.selectedPhase,
-      provider.hasThirdPlace,
-    );
+    final phases = provider.roundsConfig.keys.toList();
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: context.res.wp(10)),

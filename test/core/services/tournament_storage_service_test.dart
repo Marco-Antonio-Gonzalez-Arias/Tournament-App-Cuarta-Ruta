@@ -15,7 +15,7 @@ void main() {
 
   final t1 = TournamentModel(
     name: 'Torneo A',
-    startPhase: PhasesEnum.cuartos,
+    startPhase: PhasesEnum.quarterFinals,
     hasThirdPlace: false,
     hasReplica: false,
     roundsConfig: {},

@@ -18,14 +18,14 @@ void main() {
 
   final t1 = TournamentModel(
     name: 'Árbol',
-    startPhase: PhasesEnum.cuartos,
+    startPhase: PhasesEnum.quarterFinals,
     hasThirdPlace: false,
     hasReplica: false,
     roundsConfig: {},
   );
   final t2 = TournamentModel(
     name: 'Zorro',
-    startPhase: PhasesEnum.cuartos,
+    startPhase: PhasesEnum.quarterFinals,
     hasThirdPlace: false,
     hasReplica: false,
     roundsConfig: {},

@@ -15,7 +15,7 @@ void main() {
     registerFallbackValue(
       TournamentModel(
         name: '',
-        startPhase: PhasesEnum.octavos,
+        startPhase: PhasesEnum.roundOf16,
         hasThirdPlace: false,
         hasReplica: false,
         roundsConfig: {},
@@ -30,19 +30,19 @@ void main() {
 
   group('TournamentProvider Tests', () {
     test('Should maintain memory of rounds when switching phases', () {
-      provider.updateSingleRound(PhasesEnum.octavos, 2);
+      provider.updateSingleRound(PhasesEnum.roundOf16, 2);
 
-      provider.updateSettings(PhasesEnum.semifinales, false, true);
-      expect(provider.roundsConfig[PhasesEnum.octavos], 3);
+      provider.updateSettings(PhasesEnum.semifinals, false, true);
+      expect(provider.roundsConfig[PhasesEnum.roundOf16], 3);
 
-      provider.updateSettings(PhasesEnum.octavos, false, true);
-      expect(provider.roundsConfig[PhasesEnum.octavos], 3);
+      provider.updateSettings(PhasesEnum.roundOf16, false, true);
+      expect(provider.roundsConfig[PhasesEnum.roundOf16], 3);
     });
 
     test('createTournament should filter out irrelevant phases', () async {
       when(() => mockStorage.create(any())).thenAnswer((_) async => {});
 
-      provider.updateSettings(PhasesEnum.semifinales, false, true);
+      provider.updateSettings(PhasesEnum.semifinals, false, true);
 
       await provider.createTournament('Test Filter', mockStorage);
 
@@ -60,11 +60,11 @@ void main() {
     });
 
     test('updateSingleRound should clamp values between 1 and 5', () {
-      provider.updateSingleRound(PhasesEnum.octavos, 10);
-      expect(provider.roundsConfig[PhasesEnum.octavos], 5);
+      provider.updateSingleRound(PhasesEnum.roundOf16, 10);
+      expect(provider.roundsConfig[PhasesEnum.roundOf16], 5);
 
-      provider.updateSingleRound(PhasesEnum.octavos, -10);
-      expect(provider.roundsConfig[PhasesEnum.octavos], 1);
+      provider.updateSingleRound(PhasesEnum.roundOf16, -10);
+      expect(provider.roundsConfig[PhasesEnum.roundOf16], 1);
     });
   });
 }

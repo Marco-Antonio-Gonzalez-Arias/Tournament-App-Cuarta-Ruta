@@ -5,7 +5,7 @@ import 'package:cuarta_ruta_app/core/services/tournament_storage_base.dart';
 import 'package:cuarta_ruta_app/models/impl/tournament_model.dart';
 
 class TournamentProvider extends ChangeNotifier {
-  PhasesEnum _selectedPhase = PhasesEnum.octavos;
+  PhasesEnum _selectedPhase = PhasesEnum.roundOf16;
   bool _hasThirdPlace = false;
   bool _hasReplica = true;
 
