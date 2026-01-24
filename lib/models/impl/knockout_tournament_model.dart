@@ -15,10 +15,11 @@ class KnockoutTournamentModel implements TournamentBase {
   final int pointsDifference;
   @override
   final int replicaCount;
-  
+
   final PhasesEnum startPhase;
   final bool hasThirdPlace;
   final Map<PhasesEnum, int> roundsConfig;
+  final bool hasWildcard;
 
   KnockoutTournamentModel({
     String? id,
@@ -29,6 +30,7 @@ class KnockoutTournamentModel implements TournamentBase {
     required this.startPhase,
     required this.hasThirdPlace,
     required this.roundsConfig,
+    required this.hasWildcard,
   }) : id = id ?? const Uuid().v4(),
        createdAt = createdAt ?? DateTime.now();
 
@@ -39,6 +41,7 @@ class KnockoutTournamentModel implements TournamentBase {
     PhasesEnum? startPhase,
     bool? hasThirdPlace,
     Map<PhasesEnum, int>? roundsConfig,
+    bool? hasWildcard,
   }) {
     return KnockoutTournamentModel(
       id: id,
@@ -49,6 +52,7 @@ class KnockoutTournamentModel implements TournamentBase {
       startPhase: startPhase ?? this.startPhase,
       hasThirdPlace: hasThirdPlace ?? this.hasThirdPlace,
       roundsConfig: roundsConfig ?? this.roundsConfig,
+      hasWildcard: hasWildcard ?? this.hasWildcard,
     );
   }
 
@@ -65,6 +69,7 @@ class KnockoutTournamentModel implements TournamentBase {
       roundsConfig: config.map(
         (k, v) => MapEntry(PhasesEnum.values.byName(k), v),
       ),
+      hasWildcard: json['hasWildcard'] ?? false,
     );
   }
 
@@ -78,5 +83,6 @@ class KnockoutTournamentModel implements TournamentBase {
     'startPhase': startPhase.name,
     'hasThirdPlace': hasThirdPlace,
     'roundsConfig': roundsConfig.map((k, v) => MapEntry(k.name, v)),
+    'hasWildcard': hasWildcard,
   };
 }
