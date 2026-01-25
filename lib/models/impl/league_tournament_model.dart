@@ -5,6 +5,7 @@ import 'package:cuarta_ruta_app/models/tournament_base.dart';
 class LeagueTournamentModel implements TournamentBase {
   @override
   final String id;
+  @override
   final DateTime createdAt;
   @override
   final String name;

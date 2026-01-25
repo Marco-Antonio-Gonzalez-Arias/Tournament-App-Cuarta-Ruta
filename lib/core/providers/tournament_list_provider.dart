@@ -3,12 +3,12 @@ import 'package:collection/collection.dart';
 import 'package:cuarta_ruta_app/core/services/app_preferences_base.dart';
 import 'package:cuarta_ruta_app/core/services/tournament_storage_base.dart';
 import 'package:cuarta_ruta_app/core/enums/tournament_sort_option_enum.dart';
-import 'package:cuarta_ruta_app/models/impl/tournament_model.dart';
+import 'package:cuarta_ruta_app/models/tournament_base.dart';
 
 class TournamentListProvider extends ChangeNotifier {
   final TournamentStorageBase _storage;
   final AppPreferencesBase _prefs;
-  List<TournamentModel> _tournaments = [];
+  List<TournamentBase> _tournaments = [];
   TournamentSortOptionEnum _sortOption = TournamentSortOptionEnum.dateNewest;
   bool _isLoading = false;
 
@@ -16,7 +16,7 @@ class TournamentListProvider extends ChangeNotifier {
     _init();
   }
 
-  List<TournamentModel> get tournaments => _tournaments;
+  List<TournamentBase> get tournaments => _tournaments;
   TournamentSortOptionEnum get sortOption => _sortOption;
   bool get isLoading => _isLoading;
 

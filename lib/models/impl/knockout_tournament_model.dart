@@ -6,6 +6,7 @@ import 'package:cuarta_ruta_app/models/tournament_base.dart';
 class KnockoutTournamentModel implements TournamentBase {
   @override
   final String id;
+  @override
   final DateTime createdAt;
   @override
   final String name;

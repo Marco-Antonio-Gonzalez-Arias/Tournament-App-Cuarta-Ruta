@@ -11,36 +11,16 @@ class KnockoutMatchGeneratorService
   }) {
     final Map<PhasesEnum, List<MatchModel>> bracket = {};
 
-    final List<PhasesEnum> mainPhases = _getMainPathPhases(startPhase);
+    final List<PhasesEnum> phases = PhaseDisplay.getIterable(
+      startPhase,
+      hasThirdPlace,
+    );
 
-    for (final phase in mainPhases) {
+    for (final phase in phases) {
       bracket[phase] = _createEmptyMatchesForPhase(phase);
     }
 
-    _addThirdPlaceIfRequired(bracket, hasThirdPlace);
-
     return bracket;
-  }
-
-  List<PhasesEnum> _getMainPathPhases(PhasesEnum startPhase) {
-    return PhasesEnum.values
-        .where(
-          (phase) =>
-              phase != PhasesEnum.thirdPlace &&
-              phase.index <= startPhase.index,
-        )
-        .toList();
-  }
-
-  void _addThirdPlaceIfRequired(
-    Map<PhasesEnum, List<MatchModel>> bracket,
-    bool hasThirdPlace,
-  ) {
-    if (hasThirdPlace) {
-      bracket[PhasesEnum.thirdPlace] = _createEmptyMatchesForPhase(
-        PhasesEnum.thirdPlace,
-      );
-    }
   }
 
   List<MatchModel> _createEmptyMatchesForPhase(PhasesEnum phase) {
