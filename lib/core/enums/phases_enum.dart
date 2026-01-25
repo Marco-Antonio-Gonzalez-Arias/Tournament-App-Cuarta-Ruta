@@ -26,4 +26,23 @@ extension PhaseDisplay on PhasesEnum {
         return 1;
     }
   }
+
+  static List<PhasesEnum> getIterable(
+    PhasesEnum startPhase,
+    bool hasThirdPlace,
+  ) {
+    final phases = PhasesEnum.values.where((p) {
+      if (p == PhasesEnum.thirdPlace || p == PhasesEnum.finalPhase) {
+        return false;
+      }
+      return p.index <= startPhase.index;
+    }).toList();
+
+    final sortedPhases = phases.reversed.toList();
+
+    if (hasThirdPlace) sortedPhases.add(PhasesEnum.thirdPlace);
+    sortedPhases.add(PhasesEnum.finalPhase);
+
+    return sortedPhases;
+  }
 }
