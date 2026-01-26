@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 import 'package:cuarta_ruta_app/models/tournament_base.dart';
+import 'package:cuarta_ruta_app/models/impl/knockout_tournament_model.dart';
 
 class TournamentTileHeader extends StatelessWidget {
   final TournamentBase tournament;
@@ -19,7 +20,7 @@ class TournamentTileHeader extends StatelessWidget {
       builder: (context, _) => Column(
         children: [
           _buildName(context),
-          if (!controller.isExpanded) _buildInitialPhase(context),
+          if (!controller.isExpanded) _buildSubheader(context),
         ],
       ),
     );
@@ -33,8 +34,15 @@ class TournamentTileHeader extends StatelessWidget {
     ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
   );
 
-  Widget _buildInitialPhase(BuildContext context) => Text(
-    "Fase inicial: ${tournament.startPhase.displayName}",
-    style: Theme.of(context).textTheme.labelMedium,
-  );
+  Widget _buildSubheader(BuildContext context) {
+    String text = "";
+    if (tournament is KnockoutTournamentModel) {
+      text =
+          "Fase inicial: ${(tournament as KnockoutTournamentModel).startPhase.displayName}";
+    } else {
+      text = "Tipo: Liga";
+    }
+
+    return Text(text, style: Theme.of(context).textTheme.labelMedium);
+  }
 }
