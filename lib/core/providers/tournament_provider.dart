@@ -40,7 +40,7 @@ class TournamentProvider extends ChangeNotifier {
 
   void _initializeDefaultRounds() {
     final phases = PhaseDisplay.getIterable(_selectedPhase, _hasThirdPlace);
-    _roundsConfig.clear();
+
     for (final phase in phases) {
       _roundsConfig.putIfAbsent(phase, () => 1);
     }

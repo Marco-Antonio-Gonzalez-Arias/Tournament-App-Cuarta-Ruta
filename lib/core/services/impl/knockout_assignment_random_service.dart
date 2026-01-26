@@ -4,7 +4,7 @@ import 'package:cuarta_ruta_app/models/impl/knockout_participant_model.dart';
 import 'package:cuarta_ruta_app/models/impl/match_model.dart';
 import 'package:cuarta_ruta_app/core/services/knockout_assignment_service_base.dart';
 
-class RandomKnockoutParticipantAssignmentService
+class KnockoutAssignmentRandomService
     extends KnockoutAssignmentServiceBase {
   @override
   Map<PhasesEnum, List<MatchModel>> assign(

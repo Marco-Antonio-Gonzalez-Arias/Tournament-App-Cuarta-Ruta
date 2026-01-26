@@ -13,6 +13,8 @@ class MatchModel implements MatchBase {
   @override
   final bool isCompleted;
 
+  static const _undefined = Object();
+
   MatchModel({
     String? id,
     this.participantAId,
@@ -24,14 +26,14 @@ class MatchModel implements MatchBase {
   MatchModel copyWith({
     String? participantAId,
     String? participantBId,
-    String? winnerId,
+    Object? winnerId = _undefined,
     bool? isCompleted,
   }) {
     return MatchModel(
       id: id,
       participantAId: participantAId ?? this.participantAId,
       participantBId: participantBId ?? this.participantBId,
-      winnerId: winnerId ?? this.winnerId,
+      winnerId: winnerId == _undefined ? this.winnerId : winnerId as String?,
       isCompleted: isCompleted ?? this.isCompleted,
     );
   }

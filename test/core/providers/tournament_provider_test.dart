@@ -3,7 +3,9 @@ import 'package:mocktail/mocktail.dart';
 import 'package:cuarta_ruta_app/core/providers/tournament_provider.dart';
 import 'package:cuarta_ruta_app/core/services/tournament_storage_base.dart';
 import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
-import 'package:cuarta_ruta_app/models/impl/tournament_model.dart';
+import 'package:cuarta_ruta_app/core/enums/tournament_type_enum.dart';
+import 'package:cuarta_ruta_app/models/impl/knockout_tournament_model.dart';
+import 'package:cuarta_ruta_app/models/impl/league_tournament_model.dart';
 
 class MockTournamentStorage extends Mock implements TournamentStorageBase {}
 
@@ -13,12 +15,25 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(
-      TournamentModel(
+      KnockoutTournamentModel(
         name: '',
+        pointsDifference: 2,
+        replicaCount: 1,
         startPhase: PhasesEnum.roundOf16,
         hasThirdPlace: false,
-        hasReplica: false,
+        hasWildcard: false,
         roundsConfig: {},
+      ),
+    );
+    registerFallbackValue(
+      LeagueTournamentModel(
+        name: '',
+        pointsDifference: 2,
+        replicaCount: 1,
+        participantCount: 8,
+        battlesPerParticipant: 1,
+        extraPlayer: false,
+        roundsPerBattle: 1,
       ),
     );
   });
@@ -31,29 +46,60 @@ void main() {
   group('TournamentProvider Tests', () {
     test('Should maintain memory of rounds when switching phases', () {
       provider.updateSingleRound(PhasesEnum.roundOf16, 2);
+      provider.updateSettings(phase: PhasesEnum.semifinals);
 
-      provider.updateSettings(PhasesEnum.semifinals, false, true);
-      expect(provider.roundsConfig[PhasesEnum.roundOf16], 3);
-
-      provider.updateSettings(PhasesEnum.roundOf16, false, true);
       expect(provider.roundsConfig[PhasesEnum.roundOf16], 3);
     });
 
-    test('createTournament should filter out irrelevant phases', () async {
+    test(
+      'createTournament should filter out irrelevant phases for knockout',
+      () async {
+        when(() => mockStorage.create(any())).thenAnswer((_) async => {});
+
+        provider.updateSingleRound(PhasesEnum.roundOf16, 2);
+        provider.updateSettings(
+          type: TournamentTypeEnum.knockout,
+          phase: PhasesEnum.semifinals,
+          thirdPlace: false,
+        );
+
+        await provider.createTournament('Test Knockout', mockStorage);
+
+        verify(
+          () => mockStorage.create(
+            any(
+              that: isA<KnockoutTournamentModel>()
+                  .having(
+                    (t) => t.roundsConfig.containsKey(PhasesEnum.roundOf16),
+                    'excludes old phase',
+                    false,
+                  )
+                  .having((t) => t.roundsConfig.length, 'correct count', 2),
+            ),
+          ),
+        ).called(1);
+      },
+    );
+
+    test('createTournament should correctly pass league settings', () async {
       when(() => mockStorage.create(any())).thenAnswer((_) async => {});
 
-      provider.updateSettings(PhasesEnum.semifinals, false, true);
+      provider.updateSettings(
+        type: TournamentTypeEnum.league,
+        participants: 12,
+        battles: 2,
+        extra: true,
+      );
 
-      await provider.createTournament('Test Filter', mockStorage);
+      await provider.createTournament('Test League', mockStorage);
 
       verify(
         () => mockStorage.create(
           any(
-            that: isA<TournamentModel>().having(
-              (t) => t.roundsConfig.length,
-              'roundsConfig length',
-              2,
-            ),
+            that: isA<LeagueTournamentModel>()
+                .having((t) => t.participantCount, 'participants', 12)
+                .having((t) => t.battlesPerParticipant, 'battles', 2)
+                .having((t) => t.extraPlayer, 'extra player', true),
           ),
         ),
       ).called(1);
