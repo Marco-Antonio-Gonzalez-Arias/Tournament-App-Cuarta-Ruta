@@ -1,20 +1,22 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cuarta_ruta_app/models/impl/tournament_model.dart';
+import 'package:cuarta_ruta_app/models/impl/knockout_tournament_model.dart';
 import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 
 void main() {
-  group('TournamentModel Tests', () {
+  group('KnockoutTournamentModel Tests', () {
     final Map<PhasesEnum, int> mockConfig = {
       PhasesEnum.quarterFinals: 4,
       PhasesEnum.semifinals: 2,
     };
 
     test('Constructor should initialize with UUID and current Date', () {
-      final model = TournamentModel(
+      final model = KnockoutTournamentModel(
         name: 'Copa Pistón',
+        pointsDifference: 2,
+        replicaCount: 1,
         startPhase: PhasesEnum.quarterFinals,
         hasThirdPlace: true,
-        hasReplica: false,
+        hasWildcard: false,
         roundsConfig: mockConfig,
       );
 
@@ -28,14 +30,16 @@ void main() {
       final json = {
         'id': 'uuid-123',
         'name': 'Torneo Local',
-        'startPhase': 'cuartos',
+        'pointsDifference': 2,
+        'replicaCount': 1,
+        'startPhase': 'quarterFinals',
         'hasThirdPlace': true,
-        'hasReplica': false,
-        'roundsConfig': {'cuartos': 4, 'semifinales': 2},
+        'hasWildcard': false,
+        'roundsConfig': {'quarterFinals': 4, 'semifinals': 2},
         'createdAt': '2023-10-27T10:00:00.000',
       };
 
-      final model = TournamentModel.fromJson(json);
+      final model = KnockoutTournamentModel.fromJson(json);
 
       expect(model.id, 'uuid-123');
       expect(model.startPhase, PhasesEnum.quarterFinals);
@@ -44,27 +48,32 @@ void main() {
     });
 
     test('toJson should return strings matching Enum names', () {
-      final model = TournamentModel(
+      final model = KnockoutTournamentModel(
         name: 'Master Cup',
+        pointsDifference: 2,
+        replicaCount: 1,
         startPhase: PhasesEnum.finalPhase,
         hasThirdPlace: false,
-        hasReplica: true,
+        hasWildcard: true,
         roundsConfig: {PhasesEnum.finalPhase: 1},
       );
 
       final json = model.toJson();
 
-      expect(json['startPhase'], 'faseFinal');
-      expect(json['roundsConfig']['faseFinal'], 1);
-      expect(json['hasReplica'], true);
+      expect(json['startPhase'], 'finalPhase');
+      expect(json['roundsConfig']['finalPhase'], 1);
+      expect(json['hasWildcard'], true);
+      expect(json['type'], 'knockout');
     });
 
     test('copyWith should maintain immutability of non-specified fields', () {
-      final model = TournamentModel(
+      final model = KnockoutTournamentModel(
         name: 'Original',
+        pointsDifference: 2,
+        replicaCount: 1,
         startPhase: PhasesEnum.roundOf16,
         hasThirdPlace: false,
-        hasReplica: false,
+        hasWildcard: false,
         roundsConfig: {},
       );
 
