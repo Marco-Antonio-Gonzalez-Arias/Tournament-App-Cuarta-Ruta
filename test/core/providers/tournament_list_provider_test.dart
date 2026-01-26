@@ -24,7 +24,7 @@ void main() {
     hasWildcard: false,
     pointsDifference: 2,
     replicaCount: 1,
-    roundsConfig: {},
+    roundsConfig: {PhasesEnum.quarterFinals: 1},
   );
 
   final t2 = LeagueTournamentModel(
@@ -54,8 +54,8 @@ void main() {
         await provider.loadTournaments();
 
         expect(provider.tournaments.length, 2);
-        expect(provider.tournaments[0].type.name, 'knockout');
-        expect(provider.tournaments[1].type.name, 'league');
+        expect(provider.tournaments[0], isA<KnockoutTournamentModel>());
+        expect(provider.tournaments[1], isA<LeagueTournamentModel>());
       },
     );
 
@@ -71,30 +71,24 @@ void main() {
       verify(() => mockStorage.delete(t2.id)).called(1);
     });
 
-    test(
-      'Natural Spanish Sort should work with different tournament implementations',
-      () async {
-        when(() => mockPrefs.saveSortOption(any())).thenAnswer((_) async => {});
-        when(() => mockStorage.getAll()).thenAnswer((_) async => [t2, t1]);
+    test('Natural Spanish Sort should work correctly with nameAsc', () async {
+      when(() => mockPrefs.saveSortOption(any())).thenAnswer((_) async => {});
+      when(() => mockStorage.getAll()).thenAnswer((_) async => [t2, t1]);
 
-        provider.setSortOption(TournamentSortOptionEnum.nameAsc);
-        await provider.loadTournaments();
+      provider.setSortOption(TournamentSortOptionEnum.nameAsc);
+      await provider.loadTournaments();
 
-        expect(provider.tournaments.first.name, 'Árbol');
-        expect(provider.tournaments.last.name, 'Zorro');
-      },
-    );
+      expect(provider.tournaments.first.name, 'Árbol');
+      expect(provider.tournaments.last.name, 'Zorro');
+    });
 
-    test(
-      'setSortOption should persist selection regardless of tournament types',
-      () {
-        when(() => mockPrefs.saveSortOption(any())).thenAnswer((_) async => {});
+    test('setSortOption should persist selection', () {
+      when(() => mockPrefs.saveSortOption(any())).thenAnswer((_) async => {});
 
-        provider.setSortOption(TournamentSortOptionEnum.nameDesc);
+      provider.setSortOption(TournamentSortOptionEnum.nameDesc);
 
-        expect(provider.sortOption, TournamentSortOptionEnum.nameDesc);
-        verify(() => mockPrefs.saveSortOption('nameDesc')).called(1);
-      },
-    );
+      expect(provider.sortOption, TournamentSortOptionEnum.nameDesc);
+      verify(() => mockPrefs.saveSortOption('nameDesc')).called(1);
+    });
   });
 }

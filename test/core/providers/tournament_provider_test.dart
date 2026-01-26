@@ -46,7 +46,6 @@ void main() {
   group('TournamentProvider Tests', () {
     test('Should maintain memory of rounds when switching phases', () {
       provider.updateSingleRound(PhasesEnum.roundOf16, 2);
-
       provider.updateSettings(phase: PhasesEnum.semifinals);
 
       expect(provider.roundsConfig[PhasesEnum.roundOf16], 3);
@@ -64,7 +63,7 @@ void main() {
           thirdPlace: false,
         );
 
-        await provider.createTournament('Test Filter', mockStorage);
+        await provider.createTournament('Test Knockout', mockStorage);
 
         verify(
           () => mockStorage.create(
@@ -72,19 +71,39 @@ void main() {
               that: isA<KnockoutTournamentModel>()
                   .having(
                     (t) => t.roundsConfig.containsKey(PhasesEnum.roundOf16),
-                    'excludes round of 16',
+                    'excludes old phase',
                     false,
                   )
-                  .having(
-                    (t) => t.roundsConfig.length,
-                    'roundsConfig length',
-                    2,
-                  ),
+                  .having((t) => t.roundsConfig.length, 'correct count', 2),
             ),
           ),
         ).called(1);
       },
     );
+
+    test('createTournament should correctly pass league settings', () async {
+      when(() => mockStorage.create(any())).thenAnswer((_) async => {});
+
+      provider.updateSettings(
+        type: TournamentTypeEnum.league,
+        participants: 12,
+        battles: 2,
+        extra: true,
+      );
+
+      await provider.createTournament('Test League', mockStorage);
+
+      verify(
+        () => mockStorage.create(
+          any(
+            that: isA<LeagueTournamentModel>()
+                .having((t) => t.participantCount, 'participants', 12)
+                .having((t) => t.battlesPerParticipant, 'battles', 2)
+                .having((t) => t.extraPlayer, 'extra player', true),
+          ),
+        ),
+      ).called(1);
+    });
 
     test('updateSingleRound should clamp values between 1 and 5', () {
       provider.updateSingleRound(PhasesEnum.roundOf16, 10);
