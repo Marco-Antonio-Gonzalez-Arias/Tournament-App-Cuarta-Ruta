@@ -9,7 +9,7 @@ import 'package:cuarta_ruta_app/core/enums/tournament_sort_option_enum.dart';
 import 'package:cuarta_ruta_app/core/widgets/popup_menu_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/app_bar_widget/app_bar_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/gold_card_decorator.dart';
-import 'package:cuarta_ruta_app/models/impl/tournament_model.dart';
+import 'package:cuarta_ruta_app/models/tournament_base.dart'; // Cambio aquí
 import 'package:cuarta_ruta_app/screens/tournament/list/widgets/tournament_tile_widget.dart';
 import 'package:cuarta_ruta_app/screens/tournament/list/widgets/empty_tournaments_widget.dart';
 
@@ -98,19 +98,19 @@ class _TournamentListScreenState extends State<TournamentListScreen> {
     );
   }
 
-  Widget _buildTournamentList(List<TournamentModel> tournaments) {
+  Widget _buildTournamentList(List<TournamentBase> tournaments) {
     return ListView.separated(
       padding: EdgeInsets.symmetric(
         horizontal: context.res.wp(7),
         vertical: context.res.hp(2),
       ),
       itemCount: tournaments.length,
-      separatorBuilder: _buildSeparator,
+      separatorBuilder: (_, __) => SizedBox(height: context.res.hp(1)),
       itemBuilder: (context, index) => _buildTournamentItem(tournaments[index]),
     );
   }
 
-  Widget _buildTournamentItem(TournamentModel tournament) {
+  Widget _buildTournamentItem(TournamentBase tournament) {
     return GoldCardDecorator(
       child: TournamentTileWidget(
         tournament: tournament,
@@ -124,13 +124,8 @@ class _TournamentListScreenState extends State<TournamentListScreen> {
     );
   }
 
-  Widget _buildSeparator(BuildContext context, int index) {
-    return SizedBox(height: context.res.hp(1));
-  }
-
   void _handleExpansion(String currentId, bool isExpanded) {
     if (!isExpanded) return;
-
     for (var entry in _controllers.entries) {
       if (entry.key != currentId) entry.value.collapse();
     }

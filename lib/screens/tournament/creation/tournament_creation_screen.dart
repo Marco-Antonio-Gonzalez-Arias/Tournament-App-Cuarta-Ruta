@@ -1,3 +1,4 @@
+import 'package:cuarta_ruta_app/core/enums/tournament_type_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cuarta_ruta_app/core/config/dimensions/app_dimensions.dart';
@@ -27,13 +28,19 @@ class TournamentCreationScreen extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
+    final type = context.select<TournamentProvider, TournamentTypeEnum>(
+      (p) => p.type,
+    );
+
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Column(
         children: [
           const GeneralSettingsWidget(),
-          _buildDivider(context),
-          const RoundsWidget(),
+          if (type == TournamentTypeEnum.knockout) ...[
+            _buildDivider(context),
+            const RoundsWidget(),
+          ],
         ],
       ),
     );
