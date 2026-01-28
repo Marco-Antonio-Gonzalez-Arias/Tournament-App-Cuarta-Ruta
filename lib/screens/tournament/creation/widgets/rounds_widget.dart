@@ -11,7 +11,10 @@ class RoundsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<TournamentProvider>();
-    final phases = provider.roundsConfig.keys.toList();
+    final phases = PhaseDisplay.getIterable(
+      provider.selectedPhase,
+      provider.hasThirdPlace,
+    );
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: context.res.wp(10)),

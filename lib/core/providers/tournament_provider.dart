@@ -6,6 +6,21 @@ import 'package:cuarta_ruta_app/models/impl/knockout_tournament_model.dart';
 import 'package:cuarta_ruta_app/models/impl/league_tournament_model.dart';
 
 class TournamentProvider extends ChangeNotifier {
+  // Reglas de Negocio Centralizadas
+  static const int minPointsDiff = 1;
+  static const int maxPointsDiff = 3;
+  static const int minReplicas = 1;
+  static const int maxReplicas = 2;
+  static const int minParticipants = 8;
+  static const int maxParticipants = 12;
+  static const int stepParticipants = 2;
+  static const int minBattles = 1;
+  static const int maxBattles = 2;
+  static const int minRounds = 1;
+  static const int maxRounds = 10;
+  static const int minPhaseRounds = 1;
+  static const int maxPhaseRounds = 5;
+
   TournamentTypeEnum _type = TournamentTypeEnum.knockout;
   PhasesEnum _selectedPhase = PhasesEnum.roundOf16;
   bool _hasThirdPlace = false;
@@ -13,7 +28,6 @@ class TournamentProvider extends ChangeNotifier {
   int _replicaCount = 1;
   int _pointsDifference = 2;
 
-  // Propiedades de Liga
   int _participantCount = 8;
   int _battlesPerParticipant = 1;
   bool _extraPlayer = false;
@@ -25,7 +39,6 @@ class TournamentProvider extends ChangeNotifier {
     _initializeDefaultRounds();
   }
 
-  // Getters
   TournamentTypeEnum get type => _type;
   PhasesEnum get selectedPhase => _selectedPhase;
   bool get hasThirdPlace => _hasThirdPlace;
@@ -40,7 +53,6 @@ class TournamentProvider extends ChangeNotifier {
 
   void _initializeDefaultRounds() {
     final phases = PhaseDisplay.getIterable(_selectedPhase, _hasThirdPlace);
-
     for (final phase in phases) {
       _roundsConfig.putIfAbsent(phase, () => 1);
     }
@@ -62,12 +74,22 @@ class TournamentProvider extends ChangeNotifier {
     _selectedPhase = phase ?? _selectedPhase;
     _hasThirdPlace = thirdPlace ?? _hasThirdPlace;
     _hasWildcard = wildcard ?? _hasWildcard;
-    _replicaCount = replicas ?? _replicaCount;
-    _pointsDifference = pointsDiff ?? _pointsDifference;
-    _participantCount = participants ?? _participantCount;
-    _battlesPerParticipant = battles ?? _battlesPerParticipant;
     _extraPlayer = extra ?? _extraPlayer;
-    _roundsPerBattle = rounds ?? _roundsPerBattle;
+
+    _replicaCount = (replicas ?? _replicaCount).clamp(minReplicas, maxReplicas);
+    _pointsDifference = (pointsDiff ?? _pointsDifference).clamp(
+      minPointsDiff,
+      maxPointsDiff,
+    );
+    _participantCount = (participants ?? _participantCount).clamp(
+      minParticipants,
+      maxParticipants,
+    );
+    _battlesPerParticipant = (battles ?? _battlesPerParticipant).clamp(
+      minBattles,
+      maxBattles,
+    );
+    _roundsPerBattle = (rounds ?? _roundsPerBattle).clamp(minRounds, maxRounds);
 
     _initializeDefaultRounds();
     notifyListeners();
@@ -75,7 +97,10 @@ class TournamentProvider extends ChangeNotifier {
 
   void updateSingleRound(PhasesEnum phase, int delta) {
     final current = _roundsConfig[phase] ?? 1;
-    _roundsConfig[phase] = (current + delta).clamp(1, 5);
+    _roundsConfig[phase] = (current + delta).clamp(
+      minPhaseRounds,
+      maxPhaseRounds,
+    );
     notifyListeners();
   }
 

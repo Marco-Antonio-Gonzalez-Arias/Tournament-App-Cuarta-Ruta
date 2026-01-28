@@ -35,7 +35,11 @@ class GeneralSettingsWidget extends StatelessWidget {
   }
 
   Widget _buildTitle(BuildContext context, String text) {
-    return Text(text, textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyMedium);
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.bodyMedium,
+    );
   }
 
   Widget _buildTypeDropdown(BuildContext context, TournamentProvider provider) {
@@ -43,42 +47,65 @@ class GeneralSettingsWidget extends StatelessWidget {
       label: 'Tipo de Torneo',
       value: provider.type,
       items: TournamentTypeEnum.values,
-      itemLabelBuilder: (type) => type == TournamentTypeEnum.knockout ? 'Eliminatorias' : 'Liga',
+      itemLabelBuilder: (type) =>
+          type == TournamentTypeEnum.knockout ? 'Eliminatorias' : 'Liga',
       onChanged: (val) => provider.updateSettings(type: val),
       textStyle: Theme.of(context).textTheme.labelLarge,
     );
   }
 
-  Widget _buildCommonSettings(BuildContext context, TournamentProvider provider, TextStyle? style) {
+  Widget _buildCommonSettings(
+    BuildContext context,
+    TournamentProvider provider,
+    TextStyle? style,
+  ) {
     return Column(
       children: [
         CounterSelectorWidget(
           label: 'Dif. Puntos',
           count: provider.pointsDifference,
-          onIncrement: () => provider.updateSettings(pointsDiff: provider.pointsDifference + 1),
-          onDecrement: () => provider.updateSettings(pointsDiff: (provider.pointsDifference - 1).clamp(1, 10)),
+          onIncrement: () => provider.updateSettings(
+            pointsDiff: provider.pointsDifference + 1,
+          ),
+          onDecrement: () => provider.updateSettings(
+            pointsDiff: provider.pointsDifference - 1,
+          ),
+          min: TournamentProvider.minPointsDiff,
+          max: TournamentProvider.maxPointsDiff,
           textStyle: style,
         ),
         SizedBox(height: context.res.hp(1)),
         CounterSelectorWidget(
           label: 'Réplicas',
           count: provider.replicaCount,
-          onIncrement: () => provider.updateSettings(replicas: provider.replicaCount + 1),
-          onDecrement: () => provider.updateSettings(replicas: (provider.replicaCount - 1).clamp(0, 5)),
+          onIncrement: () =>
+              provider.updateSettings(replicas: provider.replicaCount + 1),
+          onDecrement: () =>
+              provider.updateSettings(replicas: provider.replicaCount - 1),
+          min: TournamentProvider.minReplicas,
+          max: TournamentProvider.maxReplicas,
           textStyle: style,
         ),
       ],
     );
   }
 
-  Widget _buildKnockoutSettings(BuildContext context, TournamentProvider provider, TextStyle? style) {
+  Widget _buildKnockoutSettings(
+    BuildContext context,
+    TournamentProvider provider,
+    TextStyle? style,
+  ) {
     return Column(
       children: [
         SizedBox(height: context.res.hp(1)),
         DropdownWidget<PhasesEnum>(
           label: 'Fase Inicial',
           value: provider.selectedPhase,
-          items: const [PhasesEnum.roundOf16, PhasesEnum.quarterFinals, PhasesEnum.semifinals],
+          items: const [
+            PhasesEnum.roundOf16,
+            PhasesEnum.quarterFinals,
+            PhasesEnum.semifinals,
+          ],
           itemLabelBuilder: (phase) => phase.displayName,
           onChanged: (val) => provider.updateSettings(phase: val),
           textStyle: style,
@@ -101,31 +128,53 @@ class GeneralSettingsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildLeagueSettings(BuildContext context, TournamentProvider provider, TextStyle? style) {
+  Widget _buildLeagueSettings(
+    BuildContext context,
+    TournamentProvider provider,
+    TextStyle? style,
+  ) {
     return Column(
       children: [
         SizedBox(height: context.res.hp(1)),
         CounterSelectorWidget(
           label: 'Participantes',
           count: provider.participantCount,
-          onIncrement: () => provider.updateSettings(participants: provider.participantCount + 1),
-          onDecrement: () => provider.updateSettings(participants: (provider.participantCount - 1).clamp(2, 32)),
+          onIncrement: () => provider.updateSettings(
+            participants:
+                provider.participantCount + TournamentProvider.stepParticipants,
+          ),
+          onDecrement: () => provider.updateSettings(
+            participants:
+                provider.participantCount - TournamentProvider.stepParticipants,
+          ),
+          min: TournamentProvider.minParticipants,
+          max: TournamentProvider.maxParticipants,
           textStyle: style,
         ),
         SizedBox(height: context.res.hp(1)),
         CounterSelectorWidget(
           label: 'Batallas x Part.',
           count: provider.battlesPerParticipant,
-          onIncrement: () => provider.updateSettings(battles: provider.battlesPerParticipant + 1),
-          onDecrement: () => provider.updateSettings(battles: (provider.battlesPerParticipant - 1).clamp(1, 10)),
+          onIncrement: () => provider.updateSettings(
+            battles: provider.battlesPerParticipant + 1,
+          ),
+          onDecrement: () => provider.updateSettings(
+            battles: provider.battlesPerParticipant - 1,
+          ),
+          min: TournamentProvider.minBattles,
+          max: TournamentProvider.maxBattles,
           textStyle: style,
         ),
         SizedBox(height: context.res.hp(1)),
         CounterSelectorWidget(
           label: 'Rondas x Batalla',
           count: provider.roundsPerBattle,
-          onIncrement: () => provider.updateSettings(rounds: provider.roundsPerBattle + 1),
-          onDecrement: () => provider.updateSettings(rounds: (provider.roundsPerBattle - 1).clamp(1, 5)),
+          onIncrement: () =>
+              provider.updateSettings(rounds: provider.roundsPerBattle + 1),
+          onDecrement: () =>
+              provider.updateSettings(rounds: provider.roundsPerBattle - 1),
+          min: TournamentProvider.minRounds,
+          max: TournamentProvider.maxRounds,
           textStyle: style,
         ),
         SizedBox(height: context.res.hp(1)),

@@ -16,14 +16,16 @@ class TournamentCreationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => TournamentProvider(),
-      child: Scaffold(
-        appBar: AppBarWidget(
-          title: "Crear Torneo",
-          height: AppDimensions.appBarHeight(context.res),
-        ),
-        body: _buildBody(context),
-        bottomNavigationBar: const StickyCreateButtonWidget(),
-      ),
+      builder: (context, child) {
+        return Scaffold(
+          appBar: AppBarWidget(
+            title: "Crear Torneo",
+            height: AppDimensions.appBarHeight(context.res),
+          ),
+          body: _buildBody(context),
+          bottomNavigationBar: const StickyCreateButtonWidget(),
+        );
+      },
     );
   }
 
