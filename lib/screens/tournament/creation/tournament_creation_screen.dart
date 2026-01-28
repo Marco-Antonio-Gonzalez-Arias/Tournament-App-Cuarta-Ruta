@@ -2,7 +2,7 @@ import 'package:cuarta_ruta_app/core/enums/tournament_type_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cuarta_ruta_app/core/config/dimensions/app_dimensions.dart';
-import 'package:cuarta_ruta_app/core/providers/tournament_provider.dart';
+import 'package:cuarta_ruta_app/core/providers/tournament_creation_provider.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/widgets/app_bar_widget/app_bar_widget.dart';
 import 'package:cuarta_ruta_app/screens/tournament/creation/widgets/general_settings_widget.dart';
@@ -15,7 +15,7 @@ class TournamentCreationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => TournamentProvider(),
+      create: (_) => TournamentCreationProvider(),
       builder: (context, child) {
         return Scaffold(
           appBar: AppBarWidget(
@@ -30,7 +30,7 @@ class TournamentCreationScreen extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    final type = context.select<TournamentProvider, TournamentTypeEnum>(
+    final type = context.select<TournamentCreationProvider, TournamentTypeEnum>(
       (p) => p.type,
     );
 

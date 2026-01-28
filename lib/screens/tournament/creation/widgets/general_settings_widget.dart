@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cuarta_ruta_app/core/providers/tournament_provider.dart';
+import 'package:cuarta_ruta_app/core/providers/tournament_creation_provider.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 import 'package:cuarta_ruta_app/core/enums/tournament_type_enum.dart';
@@ -13,7 +13,7 @@ class GeneralSettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<TournamentProvider>();
+    final provider = context.watch<TournamentCreationProvider>();
     final style = Theme.of(context).textTheme.labelLarge;
 
     return Container(
@@ -42,7 +42,7 @@ class GeneralSettingsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildTypeDropdown(BuildContext context, TournamentProvider provider) {
+  Widget _buildTypeDropdown(BuildContext context, TournamentCreationProvider provider) {
     return DropdownWidget<TournamentTypeEnum>(
       label: 'Tipo de Torneo',
       value: provider.type,
@@ -56,7 +56,7 @@ class GeneralSettingsWidget extends StatelessWidget {
 
   Widget _buildCommonSettings(
     BuildContext context,
-    TournamentProvider provider,
+    TournamentCreationProvider provider,
     TextStyle? style,
   ) {
     return Column(
@@ -70,8 +70,8 @@ class GeneralSettingsWidget extends StatelessWidget {
           onDecrement: () => provider.updateSettings(
             pointsDiff: provider.pointsDifference - 1,
           ),
-          min: TournamentProvider.minPointsDiff,
-          max: TournamentProvider.maxPointsDiff,
+          min: TournamentCreationProvider.minPointsDiff,
+          max: TournamentCreationProvider.maxPointsDiff,
           textStyle: style,
         ),
         SizedBox(height: context.res.hp(1)),
@@ -82,8 +82,8 @@ class GeneralSettingsWidget extends StatelessWidget {
               provider.updateSettings(replicas: provider.replicaCount + 1),
           onDecrement: () =>
               provider.updateSettings(replicas: provider.replicaCount - 1),
-          min: TournamentProvider.minReplicas,
-          max: TournamentProvider.maxReplicas,
+          min: TournamentCreationProvider.minReplicas,
+          max: TournamentCreationProvider.maxReplicas,
           textStyle: style,
         ),
       ],
@@ -92,7 +92,7 @@ class GeneralSettingsWidget extends StatelessWidget {
 
   Widget _buildKnockoutSettings(
     BuildContext context,
-    TournamentProvider provider,
+    TournamentCreationProvider provider,
     TextStyle? style,
   ) {
     return Column(
@@ -130,7 +130,7 @@ class GeneralSettingsWidget extends StatelessWidget {
 
   Widget _buildLeagueSettings(
     BuildContext context,
-    TournamentProvider provider,
+    TournamentCreationProvider provider,
     TextStyle? style,
   ) {
     return Column(
@@ -141,14 +141,14 @@ class GeneralSettingsWidget extends StatelessWidget {
           count: provider.participantCount,
           onIncrement: () => provider.updateSettings(
             participants:
-                provider.participantCount + TournamentProvider.stepParticipants,
+                provider.participantCount + TournamentCreationProvider.stepParticipants,
           ),
           onDecrement: () => provider.updateSettings(
             participants:
-                provider.participantCount - TournamentProvider.stepParticipants,
+                provider.participantCount - TournamentCreationProvider.stepParticipants,
           ),
-          min: TournamentProvider.minParticipants,
-          max: TournamentProvider.maxParticipants,
+          min: TournamentCreationProvider.minParticipants,
+          max: TournamentCreationProvider.maxParticipants,
           textStyle: style,
         ),
         SizedBox(height: context.res.hp(1)),
@@ -161,8 +161,8 @@ class GeneralSettingsWidget extends StatelessWidget {
           onDecrement: () => provider.updateSettings(
             battles: provider.battlesPerParticipant - 1,
           ),
-          min: TournamentProvider.minBattles,
-          max: TournamentProvider.maxBattles,
+          min: TournamentCreationProvider.minBattles,
+          max: TournamentCreationProvider.maxBattles,
           textStyle: style,
         ),
         SizedBox(height: context.res.hp(1)),
@@ -173,8 +173,8 @@ class GeneralSettingsWidget extends StatelessWidget {
               provider.updateSettings(rounds: provider.roundsPerBattle + 1),
           onDecrement: () =>
               provider.updateSettings(rounds: provider.roundsPerBattle - 1),
-          min: TournamentProvider.minRounds,
-          max: TournamentProvider.maxRounds,
+          min: TournamentCreationProvider.minRounds,
+          max: TournamentCreationProvider.maxRounds,
           textStyle: style,
         ),
         SizedBox(height: context.res.hp(1)),

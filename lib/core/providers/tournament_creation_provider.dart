@@ -5,8 +5,7 @@ import 'package:cuarta_ruta_app/core/services/tournament_storage_base.dart';
 import 'package:cuarta_ruta_app/models/impl/knockout_tournament_model.dart';
 import 'package:cuarta_ruta_app/models/impl/league_tournament_model.dart';
 
-class TournamentProvider extends ChangeNotifier {
-  // Reglas de Negocio Centralizadas
+class TournamentCreationProvider extends ChangeNotifier {
   static const int minPointsDiff = 1;
   static const int maxPointsDiff = 3;
   static const int minReplicas = 1;
@@ -35,7 +34,7 @@ class TournamentProvider extends ChangeNotifier {
 
   final Map<PhasesEnum, int> _roundsConfig = {};
 
-  TournamentProvider() {
+  TournamentCreationProvider() {
     _initializeDefaultRounds();
   }
 

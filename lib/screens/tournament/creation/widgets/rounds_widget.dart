@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cuarta_ruta_app/core/providers/tournament_provider.dart';
+import 'package:cuarta_ruta_app/core/providers/tournament_creation_provider.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
 import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 import 'package:cuarta_ruta_app/core/widgets/counter_selector_widget.dart';
@@ -10,7 +10,7 @@ class RoundsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<TournamentProvider>();
+    final provider = context.watch<TournamentCreationProvider>();
     final phases = PhaseDisplay.getIterable(
       provider.selectedPhase,
       provider.hasThirdPlace,
@@ -38,7 +38,7 @@ class RoundsWidget extends StatelessWidget {
 
   List<Widget> _buildPhaseSelectors(
     BuildContext context,
-    TournamentProvider provider,
+    TournamentCreationProvider provider,
     List<PhasesEnum> phases,
   ) {
     return phases
@@ -48,7 +48,7 @@ class RoundsWidget extends StatelessWidget {
 
   Widget _buildCounterItem(
     BuildContext context,
-    TournamentProvider provider,
+    TournamentCreationProvider provider,
     PhasesEnum phase,
   ) {
     return Padding(

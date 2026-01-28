@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:cuarta_ruta_app/core/providers/tournament_provider.dart';
+import 'package:cuarta_ruta_app/core/providers/tournament_creation_provider.dart';
 import 'package:cuarta_ruta_app/core/services/tournament_storage_base.dart';
 import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 import 'package:cuarta_ruta_app/core/enums/tournament_type_enum.dart';
@@ -10,7 +10,7 @@ import 'package:cuarta_ruta_app/models/impl/league_tournament_model.dart';
 class MockTournamentStorage extends Mock implements TournamentStorageBase {}
 
 void main() {
-  late TournamentProvider provider;
+  late TournamentCreationProvider provider;
   late MockTournamentStorage mockStorage;
 
   setUpAll(() {
@@ -39,7 +39,7 @@ void main() {
   });
 
   setUp(() {
-    provider = TournamentProvider();
+    provider = TournamentCreationProvider();
     mockStorage = MockTournamentStorage();
   });
 
