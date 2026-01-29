@@ -13,7 +13,7 @@ class KnockoutTournamentModel implements TournamentBase {
   @override
   final TournamentTypeEnum type = TournamentTypeEnum.knockout;
   @override
-  final int pointsDifference;
+  final double pointsDifference;
   @override
   final int replicaCount;
 
@@ -37,7 +37,7 @@ class KnockoutTournamentModel implements TournamentBase {
 
   KnockoutTournamentModel copyWith({
     String? name,
-    int? pointsDifference,
+    double? pointsDifference,
     int? replicaCount,
     PhasesEnum? startPhase,
     bool? hasThirdPlace,
@@ -63,7 +63,7 @@ class KnockoutTournamentModel implements TournamentBase {
       id: json['id'],
       createdAt: DateTime.parse(json['createdAt']),
       name: json['name'],
-      pointsDifference: json['pointsDifference'],
+      pointsDifference: (json['pointsDifference'] as num).toDouble(),
       replicaCount: json['replicaCount'],
       startPhase: PhasesEnum.values.byName(json['startPhase']),
       hasThirdPlace: json['hasThirdPlace'],

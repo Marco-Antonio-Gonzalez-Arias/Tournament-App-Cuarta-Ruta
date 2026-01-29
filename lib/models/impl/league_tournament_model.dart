@@ -12,7 +12,7 @@ class LeagueTournamentModel implements TournamentBase {
   @override
   final TournamentTypeEnum type = TournamentTypeEnum.league;
   @override
-  final int pointsDifference;
+  final double pointsDifference;
   @override
   final int replicaCount;
 
@@ -36,7 +36,7 @@ class LeagueTournamentModel implements TournamentBase {
 
   LeagueTournamentModel copyWith({
     String? name,
-    int? pointsDifference,
+    double? pointsDifference,
     int? replicaCount,
     int? participantCount,
     int? battlesPerParticipant,
@@ -62,7 +62,7 @@ class LeagueTournamentModel implements TournamentBase {
       id: json['id'],
       createdAt: DateTime.parse(json['createdAt']),
       name: json['name'],
-      pointsDifference: json['pointsDifference'],
+      pointsDifference: (json['pointsDifference'] as num).toDouble(),
       replicaCount: json['replicaCount'],
       participantCount: json['participantCount'],
       battlesPerParticipant: json['battlesPerParticipant'],

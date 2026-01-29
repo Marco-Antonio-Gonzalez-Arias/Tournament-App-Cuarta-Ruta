@@ -11,6 +11,7 @@ class DropdownWidget<T> extends StatelessWidget {
   final ValueChanged<T?> onChanged;
   final String Function(T) itemLabelBuilder;
   final TextStyle? textStyle;
+  final TextStyle? menuTextStyle;
 
   const DropdownWidget({
     super.key,
@@ -20,6 +21,7 @@ class DropdownWidget<T> extends StatelessWidget {
     required this.onChanged,
     required this.itemLabelBuilder,
     this.textStyle,
+    this.menuTextStyle,
   });
 
   @override
@@ -67,7 +69,10 @@ class DropdownWidget<T> extends StatelessWidget {
       .map(
         (item) => DropdownMenuItem<T>(
           value: item,
-          child: Text(itemLabelBuilder(item), style: _defaultStyle(context)),
+          child: Text(
+            itemLabelBuilder(item),
+            style: menuTextStyle ?? _defaultStyle(context),
+          ),
         ),
       )
       .toList();

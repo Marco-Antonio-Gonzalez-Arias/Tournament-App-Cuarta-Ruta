@@ -6,12 +6,13 @@ import 'package:cuarta_ruta_app/core/widgets/gold_card_decorator.dart';
 
 class CounterSelectorWidget extends StatelessWidget {
   final String label;
-  final int count;
+  final num count;
   final VoidCallback onIncrement;
   final VoidCallback onDecrement;
   final TextStyle? textStyle;
-  final int min;
-  final int? max;
+  final num min;
+  final num? max;
+  final String? tooltip;
 
   const CounterSelectorWidget({
     super.key,
@@ -22,6 +23,7 @@ class CounterSelectorWidget extends StatelessWidget {
     this.textStyle,
     this.min = 1,
     this.max,
+    this.tooltip,
   });
 
   @override
@@ -33,6 +35,7 @@ class CounterSelectorWidget extends StatelessWidget {
     return GoldCardDecorator(
       child: Row(
         children: [
+          if (tooltip != null) _buildInfoIcon(context),
           Expanded(child: _buildLabelArea(context, theme)),
           _buildActionButton(
             context,
@@ -61,14 +64,38 @@ class CounterSelectorWidget extends StatelessWidget {
     child: Text(label, style: textStyle ?? theme.textTheme.bodySmall),
   );
 
+  Widget _buildInfoIcon(BuildContext context) {
+    return Tooltip(
+      message: tooltip!,
+      triggerMode: TooltipTriggerMode.tap,
+      showDuration: const Duration(seconds: 7),
+      margin: EdgeInsets.symmetric(horizontal: context.res.wp(15)),
+      padding: EdgeInsets.all(context.res.dp(1.5)),
+      child: Container(
+        width: context.res.wp(12),
+        height: context.res.hp(8),
+        color: AppColors.primaryColor,
+        child: Icon(
+          Icons.info_outline,
+          size: context.res.dp(3.5),
+          color: AppColors.getTextColor(context.isDark),
+        ),
+      ),
+    );
+  }
+
   Widget _buildCounterArea(BuildContext context, ThemeData theme) {
+    final String formattedValue = (count % 1 == 0)
+        ? count.toInt().toString()
+        : count.toStringAsFixed(1);
+
     return Container(
       width: context.res.wp(15),
       height: context.res.hp(8),
       color: AppColors.primaryColor,
       alignment: Alignment.center,
       child: Text(
-        '$count',
+        formattedValue,
         style: theme.textTheme.bodyLarge?.copyWith(
           color: AppColors.getTextColor(context.isDark),
           fontWeight: FontWeight.bold,

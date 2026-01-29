@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cuarta_ruta_app/core/providers/tournament_creation_provider.dart';
 import 'package:cuarta_ruta_app/core/utils/responsive_util.dart';
-import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 import 'package:cuarta_ruta_app/core/enums/tournament_type_enum.dart';
 import 'package:cuarta_ruta_app/core/widgets/dropdown_widget.dart';
-import 'package:cuarta_ruta_app/core/widgets/toggle_option_widget.dart';
 import 'package:cuarta_ruta_app/core/widgets/counter_selector_widget.dart';
+import 'package:cuarta_ruta_app/screens/tournament/creation/widgets/knockout_settings_section.dart';
+import 'package:cuarta_ruta_app/screens/tournament/creation/widgets/league_settings_section.dart';
 
 class GeneralSettingsWidget extends StatelessWidget {
   const GeneralSettingsWidget({super.key});
@@ -25,10 +25,11 @@ class GeneralSettingsWidget extends StatelessWidget {
           _buildTypeDropdown(context, provider),
           SizedBox(height: context.res.hp(1)),
           _buildCommonSettings(context, provider, style),
+
           if (provider.type == TournamentTypeEnum.knockout)
-            _buildKnockoutSettings(context, provider, style)
+            KnockoutSettingsSection(provider: provider, style: style)
           else
-            _buildLeagueSettings(context, provider, style),
+            LeagueSettingsSection(provider: provider, style: style),
         ],
       ),
     );
@@ -42,13 +43,15 @@ class GeneralSettingsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildTypeDropdown(BuildContext context, TournamentCreationProvider provider) {
+  Widget _buildTypeDropdown(
+    BuildContext context,
+    TournamentCreationProvider provider,
+  ) {
     return DropdownWidget<TournamentTypeEnum>(
       label: 'Tipo de Torneo',
       value: provider.type,
       items: TournamentTypeEnum.values,
-      itemLabelBuilder: (type) =>
-          type == TournamentTypeEnum.knockout ? 'Eliminatorias' : 'Liga',
+      itemLabelBuilder: (type) => type.displayName,
       onChanged: (val) => provider.updateSettings(type: val),
       textStyle: Theme.of(context).textTheme.labelLarge,
     );
@@ -62,13 +65,13 @@ class GeneralSettingsWidget extends StatelessWidget {
     return Column(
       children: [
         CounterSelectorWidget(
-          label: 'Dif. Puntos',
+          label: 'Diferencia de puntos',
           count: provider.pointsDifference,
           onIncrement: () => provider.updateSettings(
-            pointsDiff: provider.pointsDifference + 1,
+            pointsDiff: provider.pointsDifference + 0.5,
           ),
           onDecrement: () => provider.updateSettings(
-            pointsDiff: provider.pointsDifference - 1,
+            pointsDiff: provider.pointsDifference - 0.5,
           ),
           min: TournamentCreationProvider.minPointsDiff,
           max: TournamentCreationProvider.maxPointsDiff,
@@ -84,104 +87,6 @@ class GeneralSettingsWidget extends StatelessWidget {
               provider.updateSettings(replicas: provider.replicaCount - 1),
           min: TournamentCreationProvider.minReplicas,
           max: TournamentCreationProvider.maxReplicas,
-          textStyle: style,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildKnockoutSettings(
-    BuildContext context,
-    TournamentCreationProvider provider,
-    TextStyle? style,
-  ) {
-    return Column(
-      children: [
-        SizedBox(height: context.res.hp(1)),
-        DropdownWidget<PhasesEnum>(
-          label: 'Fase Inicial',
-          value: provider.selectedPhase,
-          items: const [
-            PhasesEnum.roundOf16,
-            PhasesEnum.quarterFinals,
-            PhasesEnum.semifinals,
-          ],
-          itemLabelBuilder: (phase) => phase.displayName,
-          onChanged: (val) => provider.updateSettings(phase: val),
-          textStyle: style,
-        ),
-        SizedBox(height: context.res.hp(1)),
-        ToggleOptionWidget(
-          label: '3er Puesto',
-          value: provider.hasThirdPlace,
-          onChanged: (val) => provider.updateSettings(thirdPlace: val),
-          textStyle: style,
-        ),
-        SizedBox(height: context.res.hp(1)),
-        ToggleOptionWidget(
-          label: 'Comodín',
-          value: provider.hasWildcard,
-          onChanged: (val) => provider.updateSettings(wildcard: val),
-          textStyle: style,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLeagueSettings(
-    BuildContext context,
-    TournamentCreationProvider provider,
-    TextStyle? style,
-  ) {
-    return Column(
-      children: [
-        SizedBox(height: context.res.hp(1)),
-        CounterSelectorWidget(
-          label: 'Participantes',
-          count: provider.participantCount,
-          onIncrement: () => provider.updateSettings(
-            participants:
-                provider.participantCount + TournamentCreationProvider.stepParticipants,
-          ),
-          onDecrement: () => provider.updateSettings(
-            participants:
-                provider.participantCount - TournamentCreationProvider.stepParticipants,
-          ),
-          min: TournamentCreationProvider.minParticipants,
-          max: TournamentCreationProvider.maxParticipants,
-          textStyle: style,
-        ),
-        SizedBox(height: context.res.hp(1)),
-        CounterSelectorWidget(
-          label: 'Batallas x Part.',
-          count: provider.battlesPerParticipant,
-          onIncrement: () => provider.updateSettings(
-            battles: provider.battlesPerParticipant + 1,
-          ),
-          onDecrement: () => provider.updateSettings(
-            battles: provider.battlesPerParticipant - 1,
-          ),
-          min: TournamentCreationProvider.minBattles,
-          max: TournamentCreationProvider.maxBattles,
-          textStyle: style,
-        ),
-        SizedBox(height: context.res.hp(1)),
-        CounterSelectorWidget(
-          label: 'Rondas x Batalla',
-          count: provider.roundsPerBattle,
-          onIncrement: () =>
-              provider.updateSettings(rounds: provider.roundsPerBattle + 1),
-          onDecrement: () =>
-              provider.updateSettings(rounds: provider.roundsPerBattle - 1),
-          min: TournamentCreationProvider.minRounds,
-          max: TournamentCreationProvider.maxRounds,
-          textStyle: style,
-        ),
-        SizedBox(height: context.res.hp(1)),
-        ToggleOptionWidget(
-          label: 'Extra Player',
-          value: provider.extraPlayer,
-          onChanged: (val) => provider.updateSettings(extra: val),
           textStyle: style,
         ),
       ],

@@ -40,7 +40,9 @@ class TournamentCreationScreen extends StatelessWidget {
         children: [
           const GeneralSettingsWidget(),
           if (type == TournamentTypeEnum.knockout) ...[
+            SizedBox(height: context.res.hp(1)),
             _buildDivider(context),
+            SizedBox(height: context.res.hp(1)),
             const RoundsWidget(),
           ],
         ],

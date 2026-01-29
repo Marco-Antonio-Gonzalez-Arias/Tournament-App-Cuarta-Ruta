@@ -5,6 +5,6 @@ abstract class TournamentBase {
   String get name;
   DateTime get createdAt;
   TournamentTypeEnum get type;
-  int get pointsDifference;
+  double get pointsDifference;
   int get replicaCount;
 }

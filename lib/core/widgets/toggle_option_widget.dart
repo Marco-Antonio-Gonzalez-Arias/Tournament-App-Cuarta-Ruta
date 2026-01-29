@@ -9,6 +9,7 @@ class ToggleOptionWidget extends StatelessWidget {
   final bool value;
   final ValueChanged<bool> onChanged;
   final TextStyle? textStyle;
+  final String? tooltip;
 
   const ToggleOptionWidget({
     super.key,
@@ -16,6 +17,7 @@ class ToggleOptionWidget extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.textStyle,
+    this.tooltip,
   });
 
   @override
@@ -23,6 +25,7 @@ class ToggleOptionWidget extends StatelessWidget {
     return GoldCardDecorator(
       child: Row(
         children: [
+          if (tooltip != null) _buildInfoIcon(context),
           Expanded(child: _buildLabel(context)),
           _buildToggle(context),
         ],
@@ -38,6 +41,26 @@ class ToggleOptionWidget extends StatelessWidget {
       style: textStyle ?? Theme.of(context).textTheme.bodySmall,
     ),
   );
+
+  Widget _buildInfoIcon(BuildContext context) {
+    return Tooltip(
+      message: tooltip!,
+      triggerMode: TooltipTriggerMode.tap,
+      showDuration: const Duration(seconds: 7),
+      margin: EdgeInsets.symmetric(horizontal: context.res.wp(15)),
+      padding: EdgeInsets.all(context.res.dp(1.5)),
+      child: Container(
+        width: context.res.wp(12),
+        height: context.res.hp(8),
+        color: AppColors.primaryColor,
+        child: Icon(
+          Icons.info_outline,
+          size: context.res.dp(3.5),
+          color: AppColors.getTextColor(context.isDark),
+        ),
+      ),
+    );
+  }
 
   Widget _buildToggle(BuildContext context) => GestureDetector(
     onTap: () => onChanged(!value),

@@ -1,3 +1,4 @@
+import 'package:cuarta_ruta_app/core/enums/league_mode_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:cuarta_ruta_app/core/enums/phases_enum.dart';
 import 'package:cuarta_ruta_app/core/enums/tournament_type_enum.dart';
@@ -6,8 +7,8 @@ import 'package:cuarta_ruta_app/models/impl/knockout_tournament_model.dart';
 import 'package:cuarta_ruta_app/models/impl/league_tournament_model.dart';
 
 class TournamentCreationProvider extends ChangeNotifier {
-  static const int minPointsDiff = 1;
-  static const int maxPointsDiff = 3;
+  static const double minPointsDiff = 0.5;
+  static const double maxPointsDiff = 3.0;
   static const int minReplicas = 1;
   static const int maxReplicas = 2;
   static const int minParticipants = 8;
@@ -25,7 +26,7 @@ class TournamentCreationProvider extends ChangeNotifier {
   bool _hasThirdPlace = false;
   bool _hasWildcard = false;
   int _replicaCount = 1;
-  int _pointsDifference = 2;
+  double _pointsDifference = 1.0;
 
   int _participantCount = 8;
   int _battlesPerParticipant = 1;
@@ -43,12 +44,15 @@ class TournamentCreationProvider extends ChangeNotifier {
   bool get hasThirdPlace => _hasThirdPlace;
   bool get hasWildcard => _hasWildcard;
   int get replicaCount => _replicaCount;
-  int get pointsDifference => _pointsDifference;
+  double get pointsDifference => _pointsDifference;
   int get participantCount => _participantCount;
   int get battlesPerParticipant => _battlesPerParticipant;
   bool get extraPlayer => _extraPlayer;
   int get roundsPerBattle => _roundsPerBattle;
   Map<PhasesEnum, int> get roundsConfig => _roundsConfig;
+  LeagueModeEnum get leagueMode => (_battlesPerParticipant == 2 && _extraPlayer)
+      ? LeagueModeEnum.doubleWithExtra
+      : LeagueModeEnum.singleNoExtra;
 
   void _initializeDefaultRounds() {
     final phases = PhaseDisplay.getIterable(_selectedPhase, _hasThirdPlace);
@@ -63,7 +67,7 @@ class TournamentCreationProvider extends ChangeNotifier {
     bool? thirdPlace,
     bool? wildcard,
     int? replicas,
-    int? pointsDiff,
+    double? pointsDiff,
     int? participants,
     int? battles,
     bool? extra,
@@ -107,38 +111,43 @@ class TournamentCreationProvider extends ChangeNotifier {
     String name,
     TournamentStorageBase storage,
   ) async {
-    if (_type == TournamentTypeEnum.knockout) {
-      final validPhases = PhaseDisplay.getIterable(
-        _selectedPhase,
-        _hasThirdPlace,
-      );
-      final filteredRoundsConfig = {
-        for (final phase in validPhases) phase: _roundsConfig[phase] ?? 1,
-      };
+    final tournament = _type == TournamentTypeEnum.knockout
+        ? _buildKnockoutModel(name)
+        : _buildLeagueModel(name);
 
-      await storage.create(
-        KnockoutTournamentModel(
-          name: name,
-          pointsDifference: _pointsDifference,
-          replicaCount: _replicaCount,
-          startPhase: _selectedPhase,
-          hasThirdPlace: _hasThirdPlace,
-          hasWildcard: _hasWildcard,
-          roundsConfig: filteredRoundsConfig,
-        ),
-      );
-    } else {
-      await storage.create(
-        LeagueTournamentModel(
-          name: name,
-          pointsDifference: _pointsDifference,
-          replicaCount: _replicaCount,
-          participantCount: _participantCount,
-          battlesPerParticipant: _battlesPerParticipant,
-          extraPlayer: _extraPlayer,
-          roundsPerBattle: _roundsPerBattle,
-        ),
-      );
-    }
+    await storage.create(tournament);
+  }
+
+  KnockoutTournamentModel _buildKnockoutModel(String name) {
+    final validPhases = PhaseDisplay.getIterable(
+      _selectedPhase,
+      _hasThirdPlace,
+    );
+
+    final filteredRoundsConfig = {
+      for (final phase in validPhases) phase: _roundsConfig[phase] ?? 1,
+    };
+
+    return KnockoutTournamentModel(
+      name: name,
+      pointsDifference: _pointsDifference,
+      replicaCount: _replicaCount,
+      startPhase: _selectedPhase,
+      hasThirdPlace: _hasThirdPlace,
+      hasWildcard: _hasWildcard,
+      roundsConfig: filteredRoundsConfig,
+    );
+  }
+
+  LeagueTournamentModel _buildLeagueModel(String name) {
+    return LeagueTournamentModel(
+      name: name,
+      pointsDifference: _pointsDifference,
+      replicaCount: _replicaCount,
+      participantCount: _participantCount,
+      battlesPerParticipant: _battlesPerParticipant,
+      extraPlayer: _extraPlayer,
+      roundsPerBattle: _roundsPerBattle,
+    );
   }
 }

@@ -37,8 +37,12 @@ class StickyCreateButtonWidget extends StatelessWidget {
     TournamentCreationProvider provider,
   ) async {
     final name = await _showNameModal(context);
-    if (name != null && context.mounted) {
-      await _processSave(context, provider, name);
+    if (name == null || !context.mounted) return;
+
+    await _executeCreation(context, provider, name);
+
+    if (context.mounted) {
+      _navigateToList(context);
     }
   }
 
@@ -47,14 +51,13 @@ class StickyCreateButtonWidget extends StatelessWidget {
     builder: (_) => const InputModalWidget(title: 'Nombre del Torneo'),
   );
 
-  Future<void> _processSave(
+  Future<void> _executeCreation(
     BuildContext context,
     TournamentCreationProvider provider,
     String name,
   ) async {
     final storage = context.read<TournamentStorageBase>();
     await provider.createTournament(name, storage);
-    if (context.mounted) _navigateToList(context);
   }
 
   void _navigateToList(BuildContext context) {
